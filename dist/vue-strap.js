@@ -1,7 +1,7 @@
 /*!
  * vue-strap 2.0.2
  * http://wffranco.github.io/vue-strap/
- * Compiled using Vue 2.2.6
+ * Compiled using Vue 2.6.11
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -249,7 +249,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
-	var _iterator = __webpack_require__(20);
+	var _iterator = __webpack_require__(21);
 	
 	var _iterator2 = _interopRequireDefault(_iterator);
 	
@@ -800,9 +800,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(4);
 	var $Object = __webpack_require__(7).Object;
-	module.exports = function defineProperty(it, key, desc){
+	module.exports = function defineProperty(it, key, desc) {
 	  return $Object.defineProperty(it, key, desc);
 	};
+
 
 /***/ }),
 /* 4 */
@@ -810,34 +811,36 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var $export = __webpack_require__(5);
 	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-	$export($export.S + $export.F * !__webpack_require__(15), 'Object', {defineProperty: __webpack_require__(11).f});
+	$export($export.S + $export.F * !__webpack_require__(15), 'Object', { defineProperty: __webpack_require__(11).f });
+
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(6)
-	  , core      = __webpack_require__(7)
-	  , ctx       = __webpack_require__(8)
-	  , hide      = __webpack_require__(10)
-	  , PROTOTYPE = 'prototype';
+	var global = __webpack_require__(6);
+	var core = __webpack_require__(7);
+	var ctx = __webpack_require__(8);
+	var hide = __webpack_require__(10);
+	var has = __webpack_require__(20);
+	var PROTOTYPE = 'prototype';
 	
-	var $export = function(type, name, source){
-	  var IS_FORCED = type & $export.F
-	    , IS_GLOBAL = type & $export.G
-	    , IS_STATIC = type & $export.S
-	    , IS_PROTO  = type & $export.P
-	    , IS_BIND   = type & $export.B
-	    , IS_WRAP   = type & $export.W
-	    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
-	    , expProto  = exports[PROTOTYPE]
-	    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
-	    , key, own, out;
-	  if(IS_GLOBAL)source = name;
-	  for(key in source){
+	var $export = function (type, name, source) {
+	  var IS_FORCED = type & $export.F;
+	  var IS_GLOBAL = type & $export.G;
+	  var IS_STATIC = type & $export.S;
+	  var IS_PROTO = type & $export.P;
+	  var IS_BIND = type & $export.B;
+	  var IS_WRAP = type & $export.W;
+	  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+	  var expProto = exports[PROTOTYPE];
+	  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+	  var key, own, out;
+	  if (IS_GLOBAL) source = name;
+	  for (key in source) {
 	    // contains in native
 	    own = !IS_FORCED && target && target[key] !== undefined;
-	    if(own && key in exports)continue;
+	    if (own && has(exports, key)) continue;
 	    // export native or passed
 	    out = own ? target[key] : source[key];
 	    // prevent global pollution for namespaces
@@ -845,11 +848,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // bind timers to global for call from export context
 	    : IS_BIND && own ? ctx(out, global)
 	    // wrap global constructors for prevent change them in library
-	    : IS_WRAP && target[key] == out ? (function(C){
-	      var F = function(a, b, c){
-	        if(this instanceof C){
-	          switch(arguments.length){
-	            case 0: return new C;
+	    : IS_WRAP && target[key] == out ? (function (C) {
+	      var F = function (a, b, c) {
+	        if (this instanceof C) {
+	          switch (arguments.length) {
+	            case 0: return new C();
 	            case 1: return new C(a);
 	            case 2: return new C(a, b);
 	          } return new C(a, b, c);
@@ -860,10 +863,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // make static versions for prototype methods
 	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
 	    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-	    if(IS_PROTO){
+	    if (IS_PROTO) {
 	      (exports.virtual || (exports.virtual = {}))[key] = out;
 	      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-	      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+	      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
 	    }
 	  }
 	};
@@ -875,8 +878,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	$export.B = 16;  // bind
 	$export.W = 32;  // wrap
 	$export.U = 64;  // safe
-	$export.R = 128; // real proto method for `library` 
+	$export.R = 128; // real proto method for `library`
 	module.exports = $export;
+
 
 /***/ }),
 /* 6 */
@@ -884,15 +888,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 	var global = module.exports = typeof window != 'undefined' && window.Math == Math
-	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+	  ? window : typeof self != 'undefined' && self.Math == Math ? self
+	  // eslint-disable-next-line no-new-func
+	  : Function('return this')();
+	if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-	var core = module.exports = {version: '2.4.0'};
-	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+	var core = module.exports = { version: '2.6.11' };
+	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
 
 /***/ }),
 /* 8 */
@@ -900,126 +908,136 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// optional / simple context binding
 	var aFunction = __webpack_require__(9);
-	module.exports = function(fn, that, length){
+	module.exports = function (fn, that, length) {
 	  aFunction(fn);
-	  if(that === undefined)return fn;
-	  switch(length){
-	    case 1: return function(a){
+	  if (that === undefined) return fn;
+	  switch (length) {
+	    case 1: return function (a) {
 	      return fn.call(that, a);
 	    };
-	    case 2: return function(a, b){
+	    case 2: return function (a, b) {
 	      return fn.call(that, a, b);
 	    };
-	    case 3: return function(a, b, c){
+	    case 3: return function (a, b, c) {
 	      return fn.call(that, a, b, c);
 	    };
 	  }
-	  return function(/* ...args */){
+	  return function (/* ...args */) {
 	    return fn.apply(that, arguments);
 	  };
 	};
+
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-	module.exports = function(it){
-	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+	module.exports = function (it) {
+	  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
 	  return it;
 	};
+
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var dP         = __webpack_require__(11)
-	  , createDesc = __webpack_require__(19);
-	module.exports = __webpack_require__(15) ? function(object, key, value){
+	var dP = __webpack_require__(11);
+	var createDesc = __webpack_require__(19);
+	module.exports = __webpack_require__(15) ? function (object, key, value) {
 	  return dP.f(object, key, createDesc(1, value));
-	} : function(object, key, value){
+	} : function (object, key, value) {
 	  object[key] = value;
 	  return object;
 	};
+
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(12)
-	  , IE8_DOM_DEFINE = __webpack_require__(14)
-	  , toPrimitive    = __webpack_require__(18)
-	  , dP             = Object.defineProperty;
+	var anObject = __webpack_require__(12);
+	var IE8_DOM_DEFINE = __webpack_require__(14);
+	var toPrimitive = __webpack_require__(18);
+	var dP = Object.defineProperty;
 	
-	exports.f = __webpack_require__(15) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	exports.f = __webpack_require__(15) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
-	  if(IE8_DOM_DEFINE)try {
+	  if (IE8_DOM_DEFINE) try {
 	    return dP(O, P, Attributes);
-	  } catch(e){ /* empty */ }
-	  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
-	  if('value' in Attributes)O[P] = Attributes.value;
+	  } catch (e) { /* empty */ }
+	  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+	  if ('value' in Attributes) O[P] = Attributes.value;
 	  return O;
 	};
+
 
 /***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(13);
-	module.exports = function(it){
-	  if(!isObject(it))throw TypeError(it + ' is not an object!');
+	module.exports = function (it) {
+	  if (!isObject(it)) throw TypeError(it + ' is not an object!');
 	  return it;
 	};
+
 
 /***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
-	module.exports = function(it){
+	module.exports = function (it) {
 	  return typeof it === 'object' ? it !== null : typeof it === 'function';
 	};
+
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(15) && !__webpack_require__(16)(function(){
-	  return Object.defineProperty(__webpack_require__(17)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(15) && !__webpack_require__(16)(function () {
+	  return Object.defineProperty(__webpack_require__(17)('div'), 'a', { get: function () { return 7; } }).a != 7;
 	});
+
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(16)(function(){
-	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(16)(function () {
+	  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 	});
+
 
 /***/ }),
 /* 16 */
 /***/ (function(module, exports) {
 
-	module.exports = function(exec){
+	module.exports = function (exec) {
 	  try {
 	    return !!exec();
-	  } catch(e){
+	  } catch (e) {
 	    return true;
 	  }
 	};
+
 
 /***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(13)
-	  , document = __webpack_require__(6).document
-	  // in old IE typeof document.createElement is 'object'
-	  , is = isObject(document) && isObject(document.createElement);
-	module.exports = function(it){
+	var isObject = __webpack_require__(13);
+	var document = __webpack_require__(6).document;
+	// typeof document.createElement is 'object' in old IE
+	var is = isObject(document) && isObject(document.createElement);
+	module.exports = function (it) {
 	  return is ? document.createElement(it) : {};
 	};
+
 
 /***/ }),
 /* 18 */
@@ -1029,79 +1047,93 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isObject = __webpack_require__(13);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
-	module.exports = function(it, S){
-	  if(!isObject(it))return it;
+	module.exports = function (it, S) {
+	  if (!isObject(it)) return it;
 	  var fn, val;
-	  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-	  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
-	  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+	  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+	  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+	  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
 	  throw TypeError("Can't convert object to primitive value");
 	};
+
 
 /***/ }),
 /* 19 */
 /***/ (function(module, exports) {
 
-	module.exports = function(bitmap, value){
+	module.exports = function (bitmap, value) {
 	  return {
-	    enumerable  : !(bitmap & 1),
+	    enumerable: !(bitmap & 1),
 	    configurable: !(bitmap & 2),
-	    writable    : !(bitmap & 4),
-	    value       : value
+	    writable: !(bitmap & 4),
+	    value: value
 	  };
 	};
 
+
 /***/ }),
 /* 20 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-	module.exports = { "default": __webpack_require__(21), __esModule: true };
+	var hasOwnProperty = {}.hasOwnProperty;
+	module.exports = function (it, key) {
+	  return hasOwnProperty.call(it, key);
+	};
+
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(22);
-	__webpack_require__(51);
-	module.exports = __webpack_require__(55).f('iterator');
+	module.exports = { "default": __webpack_require__(22), __esModule: true };
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
-	var $at  = __webpack_require__(23)(true);
-	
-	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(26)(String, 'String', function(iterated){
-	  this._t = String(iterated); // target
-	  this._i = 0;                // next index
-	// 21.1.5.2.1 %StringIteratorPrototype%.next()
-	}, function(){
-	  var O     = this._t
-	    , index = this._i
-	    , point;
-	  if(index >= O.length)return {value: undefined, done: true};
-	  point = $at(O, index);
-	  this._i += point.length;
-	  return {value: point, done: false};
-	});
+	__webpack_require__(23);
+	__webpack_require__(51);
+	module.exports = __webpack_require__(55).f('iterator');
+
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(24)
-	  , defined   = __webpack_require__(25);
+	'use strict';
+	var $at = __webpack_require__(24)(true);
+	
+	// 21.1.3.27 String.prototype[@@iterator]()
+	__webpack_require__(27)(String, 'String', function (iterated) {
+	  this._t = String(iterated); // target
+	  this._i = 0;                // next index
+	// 21.1.5.2.1 %StringIteratorPrototype%.next()
+	}, function () {
+	  var O = this._t;
+	  var index = this._i;
+	  var point;
+	  if (index >= O.length) return { value: undefined, done: true };
+	  point = $at(O, index);
+	  this._i += point.length;
+	  return { value: point, done: false };
+	});
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var toInteger = __webpack_require__(25);
+	var defined = __webpack_require__(26);
 	// true  -> String#at
 	// false -> String#codePointAt
-	module.exports = function(TO_STRING){
-	  return function(that, pos){
-	    var s = String(defined(that))
-	      , i = toInteger(pos)
-	      , l = s.length
-	      , a, b;
-	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+	module.exports = function (TO_STRING) {
+	  return function (that, pos) {
+	    var s = String(defined(that));
+	    var i = toInteger(pos);
+	    var l = s.length;
+	    var a, b;
+	    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
 	    a = s.charCodeAt(i);
 	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
 	      ? TO_STRING ? s.charAt(i) : a
@@ -1109,122 +1141,118 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	};
 
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
-
-	// 7.1.4 ToInteger
-	var ceil  = Math.ceil
-	  , floor = Math.floor;
-	module.exports = function(it){
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	};
 
 /***/ }),
 /* 25 */
 /***/ (function(module, exports) {
 
-	// 7.2.1 RequireObjectCoercible(argument)
-	module.exports = function(it){
-	  if(it == undefined)throw TypeError("Can't call method on  " + it);
-	  return it;
+	// 7.1.4 ToInteger
+	var ceil = Math.ceil;
+	var floor = Math.floor;
+	module.exports = function (it) {
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 	};
+
 
 /***/ }),
 /* 26 */
+/***/ (function(module, exports) {
+
+	// 7.2.1 RequireObjectCoercible(argument)
+	module.exports = function (it) {
+	  if (it == undefined) throw TypeError("Can't call method on  " + it);
+	  return it;
+	};
+
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY        = __webpack_require__(27)
-	  , $export        = __webpack_require__(5)
-	  , redefine       = __webpack_require__(28)
-	  , hide           = __webpack_require__(10)
-	  , has            = __webpack_require__(29)
-	  , Iterators      = __webpack_require__(30)
-	  , $iterCreate    = __webpack_require__(31)
-	  , setToStringTag = __webpack_require__(47)
-	  , getPrototypeOf = __webpack_require__(49)
-	  , ITERATOR       = __webpack_require__(48)('iterator')
-	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
-	  , FF_ITERATOR    = '@@iterator'
-	  , KEYS           = 'keys'
-	  , VALUES         = 'values';
+	var LIBRARY = __webpack_require__(28);
+	var $export = __webpack_require__(5);
+	var redefine = __webpack_require__(29);
+	var hide = __webpack_require__(10);
+	var Iterators = __webpack_require__(30);
+	var $iterCreate = __webpack_require__(31);
+	var setToStringTag = __webpack_require__(47);
+	var getPrototypeOf = __webpack_require__(49);
+	var ITERATOR = __webpack_require__(48)('iterator');
+	var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+	var FF_ITERATOR = '@@iterator';
+	var KEYS = 'keys';
+	var VALUES = 'values';
 	
-	var returnThis = function(){ return this; };
+	var returnThis = function () { return this; };
 	
-	module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+	module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
 	  $iterCreate(Constructor, NAME, next);
-	  var getMethod = function(kind){
-	    if(!BUGGY && kind in proto)return proto[kind];
-	    switch(kind){
-	      case KEYS: return function keys(){ return new Constructor(this, kind); };
-	      case VALUES: return function values(){ return new Constructor(this, kind); };
-	    } return function entries(){ return new Constructor(this, kind); };
+	  var getMethod = function (kind) {
+	    if (!BUGGY && kind in proto) return proto[kind];
+	    switch (kind) {
+	      case KEYS: return function keys() { return new Constructor(this, kind); };
+	      case VALUES: return function values() { return new Constructor(this, kind); };
+	    } return function entries() { return new Constructor(this, kind); };
 	  };
-	  var TAG        = NAME + ' Iterator'
-	    , DEF_VALUES = DEFAULT == VALUES
-	    , VALUES_BUG = false
-	    , proto      = Base.prototype
-	    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
-	    , $default   = $native || getMethod(DEFAULT)
-	    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
-	    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
-	    , methods, key, IteratorPrototype;
+	  var TAG = NAME + ' Iterator';
+	  var DEF_VALUES = DEFAULT == VALUES;
+	  var VALUES_BUG = false;
+	  var proto = Base.prototype;
+	  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+	  var $default = $native || getMethod(DEFAULT);
+	  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+	  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+	  var methods, key, IteratorPrototype;
 	  // Fix native
-	  if($anyNative){
-	    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
-	    if(IteratorPrototype !== Object.prototype){
+	  if ($anyNative) {
+	    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+	    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
 	      // Set @@toStringTag to native iterators
 	      setToStringTag(IteratorPrototype, TAG, true);
 	      // fix for some old engines
-	      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+	      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
 	    }
 	  }
 	  // fix Array#{values, @@iterator}.name in V8 / FF
-	  if(DEF_VALUES && $native && $native.name !== VALUES){
+	  if (DEF_VALUES && $native && $native.name !== VALUES) {
 	    VALUES_BUG = true;
-	    $default = function values(){ return $native.call(this); };
+	    $default = function values() { return $native.call(this); };
 	  }
 	  // Define iterator
-	  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+	  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
 	    hide(proto, ITERATOR, $default);
 	  }
 	  // Plug for library
 	  Iterators[NAME] = $default;
-	  Iterators[TAG]  = returnThis;
-	  if(DEFAULT){
+	  Iterators[TAG] = returnThis;
+	  if (DEFAULT) {
 	    methods = {
-	      values:  DEF_VALUES ? $default : getMethod(VALUES),
-	      keys:    IS_SET     ? $default : getMethod(KEYS),
+	      values: DEF_VALUES ? $default : getMethod(VALUES),
+	      keys: IS_SET ? $default : getMethod(KEYS),
 	      entries: $entries
 	    };
-	    if(FORCED)for(key in methods){
-	      if(!(key in proto))redefine(proto, key, methods[key]);
+	    if (FORCED) for (key in methods) {
+	      if (!(key in proto)) redefine(proto, key, methods[key]);
 	    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
 	  }
 	  return methods;
 	};
 
+
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 	module.exports = true;
 
+
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(10);
 
-/***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-	var hasOwnProperty = {}.hasOwnProperty;
-	module.exports = function(it, key){
-	  return hasOwnProperty.call(it, key);
-	};
 
 /***/ }),
 /* 30 */
@@ -1232,44 +1260,46 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = {};
 
+
 /***/ }),
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var create         = __webpack_require__(32)
-	  , descriptor     = __webpack_require__(19)
-	  , setToStringTag = __webpack_require__(47)
-	  , IteratorPrototype = {};
+	var create = __webpack_require__(32);
+	var descriptor = __webpack_require__(19);
+	var setToStringTag = __webpack_require__(47);
+	var IteratorPrototype = {};
 	
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(10)(IteratorPrototype, __webpack_require__(48)('iterator'), function(){ return this; });
+	__webpack_require__(10)(IteratorPrototype, __webpack_require__(48)('iterator'), function () { return this; });
 	
-	module.exports = function(Constructor, NAME, next){
-	  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+	module.exports = function (Constructor, NAME, next) {
+	  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
 	  setToStringTag(Constructor, NAME + ' Iterator');
 	};
+
 
 /***/ }),
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject    = __webpack_require__(12)
-	  , dPs         = __webpack_require__(33)
-	  , enumBugKeys = __webpack_require__(45)
-	  , IE_PROTO    = __webpack_require__(42)('IE_PROTO')
-	  , Empty       = function(){ /* empty */ }
-	  , PROTOTYPE   = 'prototype';
+	var anObject = __webpack_require__(12);
+	var dPs = __webpack_require__(33);
+	var enumBugKeys = __webpack_require__(45);
+	var IE_PROTO = __webpack_require__(42)('IE_PROTO');
+	var Empty = function () { /* empty */ };
+	var PROTOTYPE = 'prototype';
 	
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
-	var createDict = function(){
+	var createDict = function () {
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(17)('iframe')
-	    , i      = enumBugKeys.length
-	    , lt     = '<'
-	    , gt     = '>'
-	    , iframeDocument;
+	  var iframe = __webpack_require__(17)('iframe');
+	  var i = enumBugKeys.length;
+	  var lt = '<';
+	  var gt = '>';
+	  var iframeDocument;
 	  iframe.style.display = 'none';
 	  __webpack_require__(46).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
@@ -1280,15 +1310,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
 	  iframeDocument.close();
 	  createDict = iframeDocument.F;
-	  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
+	  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
 	  return createDict();
 	};
 	
-	module.exports = Object.create || function create(O, Properties){
+	module.exports = Object.create || function create(O, Properties) {
 	  var result;
-	  if(O !== null){
+	  if (O !== null) {
 	    Empty[PROTOTYPE] = anObject(O);
-	    result = new Empty;
+	    result = new Empty();
 	    Empty[PROTOTYPE] = null;
 	    // add "__proto__" for Object.getPrototypeOf polyfill
 	    result[IE_PROTO] = O;
@@ -1301,64 +1331,68 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var dP       = __webpack_require__(11)
-	  , anObject = __webpack_require__(12)
-	  , getKeys  = __webpack_require__(34);
+	var dP = __webpack_require__(11);
+	var anObject = __webpack_require__(12);
+	var getKeys = __webpack_require__(34);
 	
-	module.exports = __webpack_require__(15) ? Object.defineProperties : function defineProperties(O, Properties){
+	module.exports = __webpack_require__(15) ? Object.defineProperties : function defineProperties(O, Properties) {
 	  anObject(O);
-	  var keys   = getKeys(Properties)
-	    , length = keys.length
-	    , i = 0
-	    , P;
-	  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+	  var keys = getKeys(Properties);
+	  var length = keys.length;
+	  var i = 0;
+	  var P;
+	  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
 	  return O;
 	};
+
 
 /***/ }),
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys       = __webpack_require__(35)
-	  , enumBugKeys = __webpack_require__(45);
+	var $keys = __webpack_require__(35);
+	var enumBugKeys = __webpack_require__(45);
 	
-	module.exports = Object.keys || function keys(O){
+	module.exports = Object.keys || function keys(O) {
 	  return $keys(O, enumBugKeys);
 	};
+
 
 /***/ }),
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var has          = __webpack_require__(29)
-	  , toIObject    = __webpack_require__(36)
-	  , arrayIndexOf = __webpack_require__(39)(false)
-	  , IE_PROTO     = __webpack_require__(42)('IE_PROTO');
+	var has = __webpack_require__(20);
+	var toIObject = __webpack_require__(36);
+	var arrayIndexOf = __webpack_require__(39)(false);
+	var IE_PROTO = __webpack_require__(42)('IE_PROTO');
 	
-	module.exports = function(object, names){
-	  var O      = toIObject(object)
-	    , i      = 0
-	    , result = []
-	    , key;
-	  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+	module.exports = function (object, names) {
+	  var O = toIObject(object);
+	  var i = 0;
+	  var result = [];
+	  var key;
+	  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
 	  // Don't enum bug & hidden keys
-	  while(names.length > i)if(has(O, key = names[i++])){
+	  while (names.length > i) if (has(O, key = names[i++])) {
 	    ~arrayIndexOf(result, key) || result.push(key);
 	  }
 	  return result;
 	};
+
 
 /***/ }),
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(37)
-	  , defined = __webpack_require__(25);
-	module.exports = function(it){
+	var IObject = __webpack_require__(37);
+	var defined = __webpack_require__(26);
+	module.exports = function (it) {
 	  return IObject(defined(it));
 	};
+
 
 /***/ }),
 /* 37 */
@@ -1366,9 +1400,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
 	var cof = __webpack_require__(38);
-	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+	// eslint-disable-next-line no-prototype-builtins
+	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 	  return cof(it) == 'String' ? it.split('') : Object(it);
 	};
+
 
 /***/ }),
 /* 38 */
@@ -1376,9 +1412,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var toString = {}.toString;
 	
-	module.exports = function(it){
+	module.exports = function (it) {
 	  return toString.call(it).slice(8, -1);
 	};
+
 
 /***/ }),
 /* 39 */
@@ -1386,79 +1423,93 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
-	var toIObject = __webpack_require__(36)
-	  , toLength  = __webpack_require__(40)
-	  , toIndex   = __webpack_require__(41);
-	module.exports = function(IS_INCLUDES){
-	  return function($this, el, fromIndex){
-	    var O      = toIObject($this)
-	      , length = toLength(O.length)
-	      , index  = toIndex(fromIndex, length)
-	      , value;
+	var toIObject = __webpack_require__(36);
+	var toLength = __webpack_require__(40);
+	var toAbsoluteIndex = __webpack_require__(41);
+	module.exports = function (IS_INCLUDES) {
+	  return function ($this, el, fromIndex) {
+	    var O = toIObject($this);
+	    var length = toLength(O.length);
+	    var index = toAbsoluteIndex(fromIndex, length);
+	    var value;
 	    // Array#includes uses SameValueZero equality algorithm
-	    if(IS_INCLUDES && el != el)while(length > index){
+	    // eslint-disable-next-line no-self-compare
+	    if (IS_INCLUDES && el != el) while (length > index) {
 	      value = O[index++];
-	      if(value != value)return true;
-	    // Array#toIndex ignores holes, Array#includes - not
-	    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-	      if(O[index] === el)return IS_INCLUDES || index || 0;
+	      // eslint-disable-next-line no-self-compare
+	      if (value != value) return true;
+	    // Array#indexOf ignores holes, Array#includes - not
+	    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+	      if (O[index] === el) return IS_INCLUDES || index || 0;
 	    } return !IS_INCLUDES && -1;
 	  };
 	};
+
 
 /***/ }),
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(24)
-	  , min       = Math.min;
-	module.exports = function(it){
+	var toInteger = __webpack_require__(25);
+	var min = Math.min;
+	module.exports = function (it) {
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 	};
+
 
 /***/ }),
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(24)
-	  , max       = Math.max
-	  , min       = Math.min;
-	module.exports = function(index, length){
+	var toInteger = __webpack_require__(25);
+	var max = Math.max;
+	var min = Math.min;
+	module.exports = function (index, length) {
 	  index = toInteger(index);
 	  return index < 0 ? max(index + length, 0) : min(index, length);
 	};
+
 
 /***/ }),
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var shared = __webpack_require__(43)('keys')
-	  , uid    = __webpack_require__(44);
-	module.exports = function(key){
+	var shared = __webpack_require__(43)('keys');
+	var uid = __webpack_require__(44);
+	module.exports = function (key) {
 	  return shared[key] || (shared[key] = uid(key));
 	};
+
 
 /***/ }),
 /* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var global = __webpack_require__(6)
-	  , SHARED = '__core-js_shared__'
-	  , store  = global[SHARED] || (global[SHARED] = {});
-	module.exports = function(key){
-	  return store[key] || (store[key] = {});
-	};
+	var core = __webpack_require__(7);
+	var global = __webpack_require__(6);
+	var SHARED = '__core-js_shared__';
+	var store = global[SHARED] || (global[SHARED] = {});
+	
+	(module.exports = function (key, value) {
+	  return store[key] || (store[key] = value !== undefined ? value : {});
+	})('versions', []).push({
+	  version: core.version,
+	  mode: __webpack_require__(28) ? 'pure' : 'global',
+	  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+	});
+
 
 /***/ }),
 /* 44 */
 /***/ (function(module, exports) {
 
-	var id = 0
-	  , px = Math.random();
-	module.exports = function(key){
+	var id = 0;
+	var px = Math.random();
+	module.exports = function (key) {
 	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 	};
+
 
 /***/ }),
 /* 45 */
@@ -1469,115 +1520,129 @@ return /******/ (function(modules) { // webpackBootstrap
 	  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
 	).split(',');
 
+
 /***/ }),
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(6).document && document.documentElement;
+	var document = __webpack_require__(6).document;
+	module.exports = document && document.documentElement;
+
 
 /***/ }),
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(11).f
-	  , has = __webpack_require__(29)
-	  , TAG = __webpack_require__(48)('toStringTag');
+	var def = __webpack_require__(11).f;
+	var has = __webpack_require__(20);
+	var TAG = __webpack_require__(48)('toStringTag');
 	
-	module.exports = function(it, tag, stat){
-	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+	module.exports = function (it, tag, stat) {
+	  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
 	};
+
 
 /***/ }),
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var store      = __webpack_require__(43)('wks')
-	  , uid        = __webpack_require__(44)
-	  , Symbol     = __webpack_require__(6).Symbol
-	  , USE_SYMBOL = typeof Symbol == 'function';
+	var store = __webpack_require__(43)('wks');
+	var uid = __webpack_require__(44);
+	var Symbol = __webpack_require__(6).Symbol;
+	var USE_SYMBOL = typeof Symbol == 'function';
 	
-	var $exports = module.exports = function(name){
+	var $exports = module.exports = function (name) {
 	  return store[name] || (store[name] =
 	    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
 	};
 	
 	$exports.store = store;
 
+
 /***/ }),
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has         = __webpack_require__(29)
-	  , toObject    = __webpack_require__(50)
-	  , IE_PROTO    = __webpack_require__(42)('IE_PROTO')
-	  , ObjectProto = Object.prototype;
+	var has = __webpack_require__(20);
+	var toObject = __webpack_require__(50);
+	var IE_PROTO = __webpack_require__(42)('IE_PROTO');
+	var ObjectProto = Object.prototype;
 	
-	module.exports = Object.getPrototypeOf || function(O){
+	module.exports = Object.getPrototypeOf || function (O) {
 	  O = toObject(O);
-	  if(has(O, IE_PROTO))return O[IE_PROTO];
-	  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+	  if (has(O, IE_PROTO)) return O[IE_PROTO];
+	  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
 	    return O.constructor.prototype;
 	  } return O instanceof Object ? ObjectProto : null;
 	};
+
 
 /***/ }),
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(25);
-	module.exports = function(it){
+	var defined = __webpack_require__(26);
+	module.exports = function (it) {
 	  return Object(defined(it));
 	};
+
 
 /***/ }),
 /* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(52);
-	var global        = __webpack_require__(6)
-	  , hide          = __webpack_require__(10)
-	  , Iterators     = __webpack_require__(30)
-	  , TO_STRING_TAG = __webpack_require__(48)('toStringTag');
+	var global = __webpack_require__(6);
+	var hide = __webpack_require__(10);
+	var Iterators = __webpack_require__(30);
+	var TO_STRING_TAG = __webpack_require__(48)('toStringTag');
 	
-	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
-	  var NAME       = collections[i]
-	    , Collection = global[NAME]
-	    , proto      = Collection && Collection.prototype;
-	  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+	var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
+	  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
+	  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
+	  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
+	  'TextTrackList,TouchList').split(',');
+	
+	for (var i = 0; i < DOMIterables.length; i++) {
+	  var NAME = DOMIterables[i];
+	  var Collection = global[NAME];
+	  var proto = Collection && Collection.prototype;
+	  if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
 	  Iterators[NAME] = Iterators.Array;
 	}
+
 
 /***/ }),
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(53)
-	  , step             = __webpack_require__(54)
-	  , Iterators        = __webpack_require__(30)
-	  , toIObject        = __webpack_require__(36);
+	var addToUnscopables = __webpack_require__(53);
+	var step = __webpack_require__(54);
+	var Iterators = __webpack_require__(30);
+	var toIObject = __webpack_require__(36);
 	
 	// 22.1.3.4 Array.prototype.entries()
 	// 22.1.3.13 Array.prototype.keys()
 	// 22.1.3.29 Array.prototype.values()
 	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __webpack_require__(26)(Array, 'Array', function(iterated, kind){
+	module.exports = __webpack_require__(27)(Array, 'Array', function (iterated, kind) {
 	  this._t = toIObject(iterated); // target
 	  this._i = 0;                   // next index
 	  this._k = kind;                // kind
 	// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-	}, function(){
-	  var O     = this._t
-	    , kind  = this._k
-	    , index = this._i++;
-	  if(!O || index >= O.length){
+	}, function () {
+	  var O = this._t;
+	  var kind = this._k;
+	  var index = this._i++;
+	  if (!O || index >= O.length) {
 	    this._t = undefined;
 	    return step(1);
 	  }
-	  if(kind == 'keys'  )return step(0, index);
-	  if(kind == 'values')return step(0, O[index]);
+	  if (kind == 'keys') return step(0, index);
+	  if (kind == 'values') return step(0, O[index]);
 	  return step(0, [index, O[index]]);
 	}, 'values');
 	
@@ -1588,25 +1653,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	addToUnscopables('values');
 	addToUnscopables('entries');
 
+
 /***/ }),
 /* 53 */
 /***/ (function(module, exports) {
 
-	module.exports = function(){ /* empty */ };
+	module.exports = function () { /* empty */ };
+
 
 /***/ }),
 /* 54 */
 /***/ (function(module, exports) {
 
-	module.exports = function(done, value){
-	  return {value: value, done: !!done};
+	module.exports = function (done, value) {
+	  return { value: value, done: !!done };
 	};
+
 
 /***/ }),
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports.f = __webpack_require__(48);
+
 
 /***/ }),
 /* 56 */
@@ -1620,55 +1689,58 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(58);
 	var $Object = __webpack_require__(7).Object;
-	module.exports = function getOwnPropertyNames(it){
+	module.exports = function getOwnPropertyNames(it) {
 	  return $Object.getOwnPropertyNames(it);
 	};
+
 
 /***/ }),
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.7 Object.getOwnPropertyNames(O)
-	__webpack_require__(59)('getOwnPropertyNames', function(){
+	__webpack_require__(59)('getOwnPropertyNames', function () {
 	  return __webpack_require__(60).f;
 	});
+
 
 /***/ }),
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// most Object methods by ES6 should accept primitives
-	var $export = __webpack_require__(5)
-	  , core    = __webpack_require__(7)
-	  , fails   = __webpack_require__(16);
-	module.exports = function(KEY, exec){
-	  var fn  = (core.Object || {})[KEY] || Object[KEY]
-	    , exp = {};
+	var $export = __webpack_require__(5);
+	var core = __webpack_require__(7);
+	var fails = __webpack_require__(16);
+	module.exports = function (KEY, exec) {
+	  var fn = (core.Object || {})[KEY] || Object[KEY];
+	  var exp = {};
 	  exp[KEY] = exec(fn);
-	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+	  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
 	};
+
 
 /***/ }),
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-	var toIObject = __webpack_require__(36)
-	  , gOPN      = __webpack_require__(61).f
-	  , toString  = {}.toString;
+	var toIObject = __webpack_require__(36);
+	var gOPN = __webpack_require__(61).f;
+	var toString = {}.toString;
 	
 	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
 	  ? Object.getOwnPropertyNames(window) : [];
 	
-	var getWindowNames = function(it){
+	var getWindowNames = function (it) {
 	  try {
 	    return gOPN(it);
-	  } catch(e){
+	  } catch (e) {
 	    return windowNames.slice();
 	  }
 	};
 	
-	module.exports.f = function getOwnPropertyNames(it){
+	module.exports.f = function getOwnPropertyNames(it) {
 	  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
 	};
 
@@ -1678,12 +1750,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-	var $keys      = __webpack_require__(35)
-	  , hiddenKeys = __webpack_require__(45).concat('length', 'prototype');
+	var $keys = __webpack_require__(35);
+	var hiddenKeys = __webpack_require__(45).concat('length', 'prototype');
 	
-	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 	  return $keys(O, hiddenKeys);
 	};
+
 
 /***/ }),
 /* 62 */
@@ -2410,6 +2483,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+	
+	process.listeners = function (name) { return [] }
 	
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -2499,7 +2576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Accordion.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Accordion.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -2510,9 +2587,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-4a5b2504", __vue_options__)
+	    hotAPI.createRecord("data-v-09294ec8", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-4a5b2504", __vue_options__)
+	    hotAPI.reload("data-v-09294ec8", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Accordion.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -2576,7 +2653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-4a5b2504", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-09294ec8", module.exports)
 	  }
 	}
 
@@ -2603,7 +2680,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Affix.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Affix.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -2614,9 +2691,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-1e3e7506", __vue_options__)
+	    hotAPI.createRecord("data-v-10d59f24", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-1e3e7506", __vue_options__)
+	    hotAPI.reload("data-v-10d59f24", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Affix.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -2731,7 +2808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-1e3e7506", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-10d59f24", module.exports)
 	  }
 	}
 
@@ -2761,7 +2838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Alert.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Alert.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -2772,9 +2849,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-67c28692", __vue_options__)
+	    hotAPI.createRecord("data-v-5a59b0b0", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-67c28692", __vue_options__)
+	    hotAPI.reload("data-v-5a59b0b0", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Alert.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -2798,8 +2875,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-67c28692!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Alert.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-67c28692!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Alert.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-5a59b0b0!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Alert.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-5a59b0b0!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Alert.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -3208,7 +3285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-67c28692", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-5a59b0b0", module.exports)
 	  }
 	}
 
@@ -3238,7 +3315,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Aside.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Aside.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -3249,9 +3326,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-0c671724", __vue_options__)
+	    hotAPI.createRecord("data-v-2738c2e8", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-0c671724", __vue_options__)
+	    hotAPI.reload("data-v-2738c2e8", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Aside.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -3275,8 +3352,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-0c671724!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Aside.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-0c671724!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Aside.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2738c2e8!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Aside.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2738c2e8!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Aside.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -3446,7 +3523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-0c671724", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-2738c2e8", module.exports)
 	  }
 	}
 
@@ -3473,7 +3550,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/buttonGroup.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/buttonGroup.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -3484,9 +3561,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-375f167a", __vue_options__)
+	    hotAPI.createRecord("data-v-425b1061", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-375f167a", __vue_options__)
+	    hotAPI.reload("data-v-425b1061", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] buttonGroup.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -3560,7 +3637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-375f167a", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-425b1061", module.exports)
 	  }
 	}
 
@@ -3590,10 +3667,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Carousel.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Carousel.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-	__vue_options__._scopeId = "data-v-f20442cc"
+	__vue_options__._scopeId = "data-v-0c2c17bc"
 	
 	/* hot reload */
 	if (false) {(function () {
@@ -3602,9 +3679,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-f20442cc", __vue_options__)
+	    hotAPI.createRecord("data-v-0c2c17bc", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-f20442cc", __vue_options__)
+	    hotAPI.reload("data-v-0c2c17bc", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Carousel.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -3628,8 +3705,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-f20442cc&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-f20442cc&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-0c2c17bc&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-0c2c17bc&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -3647,7 +3724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "\n.carousel-control[data-v-f20442cc] {\n  cursor: pointer;\n}\n", "", {"version":3,"sources":["/./src/Carousel.vue?47bce3d1"],"names":[],"mappings":";AA4GA;EACA,gBAAA;CACA","file":"Carousel.vue","sourcesContent":["<template>\n<div class=\"carousel slide\" data-ride=\"carousel\">\n  <!-- Indicators -->\n  <ol class=\"carousel-indicators\" v-show=\"indicators\">\n    <li v-for=\"(indicator,i) in indicator_list\" @click=\"indicatorClick(i)\" :class=\"{active:i === index}\"><span></span></li>\n  </ol>\n  <!-- Wrapper for slides -->\n  <div class=\"carousel-inner\" role=\"listbox\">\n    <slot></slot>\n  </div>\n  <!-- Controls -->\n  <div v-show=\"controls\" class=\"carousel-controls hidden-xs\">\n    <a class=\"left carousel-control\" role=\"button\" @click=\"prev\">\n      <span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span>\n    </a>\n    <a class=\"right carousel-control\" role=\"button\" @click=\"next\">\n      <span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span>\n    </a>\n  </div>\n</div>\n</template>\n\n<script>\nimport $ from './utils/NodeList.js'\n// let coerce = {\n//   interval: 'number'\n// }\n\nexport default {\n  props: {\n    indicators: {\n      type: Boolean,\n      default: true\n    },\n    controls: {\n      type: Boolean,\n      default: true\n    },\n    interval: {\n      type: Number,\n      default: 5000\n    }\n  },\n  data () {\n    return {\n      indicator_list: [],\n      index: 0,\n      isAnimating: false\n    }\n  },\n  watch: {\n    index (newVal, oldVal) {\n      this.slide(newVal > oldVal ? 'left' : 'right', newVal, oldVal)\n    }\n  },\n  methods: {\n    indicatorClick (index) {\n      if (this.isAnimating || this.index === index) return false\n      this.isAnimating = true\n      this.index = index\n    },\n    slide (direction, next, prev) {\n      if (!this.$el) { return }\n      const $slider = $('.item', this.$el)\n      if (!$slider.length) { return }\n      const selected = $slider[next] || $slider[0]\n      $(selected).addClass(direction === 'left' ? 'next' : 'prev')\n      // request property that requires layout to force a layout\n      var x = selected.clientHeight\n      $([$slider[prev], selected]).addClass(direction).on('transitionend', () => {\n        $slider.off('transitionend').className = 'item'\n        $(selected).addClass('active')\n        this.isAnimating = false\n      })\n    },\n    next () {\n      if (!this.$el || this.isAnimating) { return false }\n      this.isAnimating = true\n      this.index + 1 < $('.item', this.$el).length ? this.index += 1 : this.index = 0\n    },\n    prev () {\n      if (!this.$el || this.isAnimating) { return false }\n      this.isAnimating = true\n      this.index === 0 ? this.index = $('.item', this.$el).length - 1 : this.index -= 1\n    },\n    toggleInterval (val) {\n      if (val === undefined) { val = this._intervalID }\n      if(this._intervalID) {\n        clearInterval(this._intervalID)\n        delete this._intervalID\n      }\n      if(val && this.interval > 0) {\n        this._intervalID = setInterval(this.next, this.interval)\n      }\n    }\n  },\n  mounted () {\n    this.toggleInterval(true)\n    $(this.$el).on('mouseenter', () => this.toggleInterval(false)).on('mouseleave', () => this.toggleInterval(true))\n  },\n  beforeDestroy () {\n    this.toggleInterval(false)\n    $(this.$el).off('mouseenter mouseleave')\n  }\n}\n</script>\n\n<style scoped>\n.carousel-control {\n  cursor: pointer;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.carousel-control[data-v-0c2c17bc] {\n  cursor: pointer;\n}\n", "", {"version":3,"sources":["/./src/Carousel.vue?47bce3d1"],"names":[],"mappings":";AA4GA;EACA,gBAAA;CACA","file":"Carousel.vue","sourcesContent":["<template>\n<div class=\"carousel slide\" data-ride=\"carousel\">\n  <!-- Indicators -->\n  <ol class=\"carousel-indicators\" v-show=\"indicators\">\n    <li v-for=\"(indicator,i) in indicator_list\" @click=\"indicatorClick(i)\" :class=\"{active:i === index}\"><span></span></li>\n  </ol>\n  <!-- Wrapper for slides -->\n  <div class=\"carousel-inner\" role=\"listbox\">\n    <slot></slot>\n  </div>\n  <!-- Controls -->\n  <div v-show=\"controls\" class=\"carousel-controls hidden-xs\">\n    <a class=\"left carousel-control\" role=\"button\" @click=\"prev\">\n      <span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span>\n    </a>\n    <a class=\"right carousel-control\" role=\"button\" @click=\"next\">\n      <span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span>\n    </a>\n  </div>\n</div>\n</template>\n\n<script>\nimport $ from './utils/NodeList.js'\n// let coerce = {\n//   interval: 'number'\n// }\n\nexport default {\n  props: {\n    indicators: {\n      type: Boolean,\n      default: true\n    },\n    controls: {\n      type: Boolean,\n      default: true\n    },\n    interval: {\n      type: Number,\n      default: 5000\n    }\n  },\n  data () {\n    return {\n      indicator_list: [],\n      index: 0,\n      isAnimating: false\n    }\n  },\n  watch: {\n    index (newVal, oldVal) {\n      this.slide(newVal > oldVal ? 'left' : 'right', newVal, oldVal)\n    }\n  },\n  methods: {\n    indicatorClick (index) {\n      if (this.isAnimating || this.index === index) return false\n      this.isAnimating = true\n      this.index = index\n    },\n    slide (direction, next, prev) {\n      if (!this.$el) { return }\n      const $slider = $('.item', this.$el)\n      if (!$slider.length) { return }\n      const selected = $slider[next] || $slider[0]\n      $(selected).addClass(direction === 'left' ? 'next' : 'prev')\n      // request property that requires layout to force a layout\n      var x = selected.clientHeight\n      $([$slider[prev], selected]).addClass(direction).on('transitionend', () => {\n        $slider.off('transitionend').className = 'item'\n        $(selected).addClass('active')\n        this.isAnimating = false\n      })\n    },\n    next () {\n      if (!this.$el || this.isAnimating) { return false }\n      this.isAnimating = true\n      this.index + 1 < $('.item', this.$el).length ? this.index += 1 : this.index = 0\n    },\n    prev () {\n      if (!this.$el || this.isAnimating) { return false }\n      this.isAnimating = true\n      this.index === 0 ? this.index = $('.item', this.$el).length - 1 : this.index -= 1\n    },\n    toggleInterval (val) {\n      if (val === undefined) { val = this._intervalID }\n      if(this._intervalID) {\n        clearInterval(this._intervalID)\n        delete this._intervalID\n      }\n      if(val && this.interval > 0) {\n        this._intervalID = setInterval(this.next, this.interval)\n      }\n    }\n  },\n  mounted () {\n    this.toggleInterval(true)\n    $(this.$el).on('mouseenter', () => this.toggleInterval(false)).on('mouseleave', () => this.toggleInterval(true))\n  },\n  beforeDestroy () {\n    this.toggleInterval(false)\n    $(this.$el).off('mouseenter mouseleave')\n  }\n}\n</script>\n\n<style scoped>\n.carousel-control {\n  cursor: pointer;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -3815,11 +3892,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      on: {
 	        "click": function($event) {
-	          _vm.indicatorClick(i)
+	          return _vm.indicatorClick(i)
 	        }
 	      }
 	    }, [_c('span')])
-	  })), _vm._v(" "), _c('div', {
+	  }), 0), _vm._v(" "), _c('div', {
 	    staticClass: "carousel-inner",
 	    attrs: {
 	      "role": "listbox"
@@ -3863,7 +3940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-f20442cc", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-0c2c17bc", module.exports)
 	  }
 	}
 
@@ -3893,10 +3970,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Checkbox.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Checkbox.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-	__vue_options__._scopeId = "data-v-841aa106"
+	__vue_options__._scopeId = "data-v-4320e89f"
 	
 	/* hot reload */
 	if (false) {(function () {
@@ -3905,9 +3982,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-841aa106", __vue_options__)
+	    hotAPI.createRecord("data-v-4320e89f", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-841aa106", __vue_options__)
+	    hotAPI.reload("data-v-4320e89f", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Checkbox.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -3931,8 +4008,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-841aa106&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Checkbox.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-841aa106&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Checkbox.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4320e89f&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Checkbox.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4320e89f&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Checkbox.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -3950,7 +4027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "\nlabel.checkbox[data-v-841aa106] {\n  position: relative;\n  padding-left: 18px;\n}\nlabel.checkbox > input[data-v-841aa106] {\n  box-sizing: border-box;\n  position: absolute;\n  z-index: -1;\n  padding: 0;\n  opacity: 0;\n  margin: 0;\n}\nlabel.checkbox > .icon[data-v-841aa106] {\n  position: absolute;\n  top: .2rem;\n  left: 0;\n  display: block;\n  width: 1.4rem;\n  height: 1.4rem;\n  line-height:1rem;\n  text-align: center;\n  user-select: none;\n  border-radius: .35rem;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: 50% 50%;\n}\nlabel.checkbox:not(.active) > .icon[data-v-841aa106] {\n  background-color: #ddd;\n  border: 1px solid #bbb;\n}\nlabel.checkbox > input:focus ~ .icon[data-v-841aa106] {\n  outline: 0;\n  border: 1px solid #66afe9;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\nlabel.checkbox.active > .icon[data-v-841aa106] {\n  background-size: 1rem 1rem;\n  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+);\n}\nlabel.checkbox.active .btn-default[data-v-841aa106] { filter: brightness(75%);\n}\nlabel.checkbox.disabled[data-v-841aa106],\nlabel.checkbox.readonly[data-v-841aa106],\n.btn.readonly[data-v-841aa106] {\n  filter: alpha(opacity=65);\n  box-shadow: none;\n  opacity: .65;\n}\nlabel.btn > input[type=checkbox][data-v-841aa106] {\n  position: absolute;\n  clip: rect(0,0,0,0);\n  pointer-events: none;\n}\n", "", {"version":3,"sources":["/./src/Checkbox.vue?a80d4f54"],"names":[],"mappings":";AAuFA;EACA,mBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;EACA,mBAAA;EACA,YAAA;EACA,WAAA;EACA,WAAA;EACA,UAAA;CACA;AACA;EACA,mBAAA;EACA,WAAA;EACA,QAAA;EACA,eAAA;EACA,cAAA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,kBAAA;EACA,sBAAA;EACA,6BAAA;EACA,mCAAA;EACA,yBAAA;CACA;AACA;EACA,uBAAA;EACA,uBAAA;CACA;AACA;EACA,WAAA;EACA,0BAAA;EACA,0EAAA;CACA;AACA;EACA,2BAAA;EACA,kZAAA;CACA;AACA,sDAAA,wBAAA;CAAA;AAEA;;;EAGA,0BAAA;EACA,iBAAA;EACA,aAAA;CACA;AACA;EACA,mBAAA;EACA,oBAAA;EACA,qBAAA;CACA","file":"Checkbox.vue","sourcesContent":["<template>\n  <a :is=\"isButton?'a':'label'\" @click=\"toggle\" :class=\"[isButton?'btn btn-'+typeColor:'open checkbox '+typeColor,{active:checked,disabled:disabled,readonly:readonly}]\">\n    <input v-if=\"name\" type=\"hidden\" :name=\"name\" :value=\"checked?trueValue:falseValue\" />\n    <span v-if=\"!isButton\" class=\"icon dropdown-toggle\" :class=\"[checked?'btn-'+typeColor:'',{bg:typeColor==='default'}]\"></span>\n    <span v-if=\"!isButton&&checked&&typeColor==='default'\" class=\"icon\"></span>\n    <slot></slot>\n  </a>\n</template>\n\n<script>\nexport default {\n  props: {\n    button: {type: Boolean, default: false},\n    disabled: {type: Boolean, default: false},\n    falseValue: {default: false},\n    name: {type: String, default: null},\n    readonly: {type: Boolean, default: false},\n    trueValue: {default: true},\n    type: {type: String, default: null},\n    value: {default: false}\n  },\n  data () {\n    return {\n      checked: (this.value === this.trueValue)\n    }\n  },\n  computed: {\n    inGroup () { return this.$parent && this.$parent.btnGroup && !this.$parent._radioGroup },\n    isButton () { return this.button || (this.$parent && this.$parent.btnGroup && this.$parent.buttons) },\n    isFalse () { return this.value === this.falseValue },\n    isTrue () { return this.value === this.trueValue },\n    parentValue () { return this.$parent.val },\n    typeColor () { return (this.type || (this.$parent && this.$parent.type)) || 'default' }\n  },\n  watch: {\n    checked (val, old) {\n      var value = val ? this.trueValue : this.falseValue\n      this.$emit('checked', val)\n      this.$emit('input', value);\n      this.updateParent()\n    },\n    parentValue (val) {\n      this.updateFromParent();\n    },\n    value (val, old) {\n      var checked = val === this.trueValue\n      if (this.checked !== checked) {\n        this.checked = checked\n      }\n    }\n  },\n  created () {\n    if (this.inGroup) {\n      const parent = this.$parent\n      parent._checkboxGroup = true\n      if (!(parent.val instanceof Array)) { parent.val = [] }\n    }\n  },\n  mounted () {\n    this.updateFromParent();\n  },\n  methods: {\n    // called @ mounted(), or whenever $parent.val changes\n    // sync our state with the $parent.val\n    updateFromParent() {\n      if (this.inGroup) {\n        var index = this.$parent.val.indexOf(this.trueValue)\n        this.checked = ~index\n      }\n    },\n    // called when our checked state changes\n    updateParent() {\n      if (this.inGroup) {\n        var index = this.$parent.val.indexOf(this.trueValue)\n        if (this.checked && !~index) this.$parent.val.push(this.trueValue)\n        if (!this.checked && ~index) this.$parent.val.splice(index, 1)\n      }\n    },\n    toggle () {\n      if (this.disabled || this.readonly) { return }\n      this.checked = !this.checked\n    }\n  }\n}\n</script>\n\n<style scoped>\nlabel.checkbox {\n  position: relative;\n  padding-left: 18px;\n}\nlabel.checkbox > input {\n  box-sizing: border-box;\n  position: absolute;\n  z-index: -1;\n  padding: 0;\n  opacity: 0;\n  margin: 0;\n}\nlabel.checkbox > .icon {\n  position: absolute;\n  top: .2rem;\n  left: 0;\n  display: block;\n  width: 1.4rem;\n  height: 1.4rem;\n  line-height:1rem;\n  text-align: center;\n  user-select: none;\n  border-radius: .35rem;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: 50% 50%;\n}\nlabel.checkbox:not(.active) > .icon {\n  background-color: #ddd;\n  border: 1px solid #bbb;\n}\nlabel.checkbox > input:focus ~ .icon {\n  outline: 0;\n  border: 1px solid #66afe9;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\nlabel.checkbox.active > .icon {\n  background-size: 1rem 1rem;\n  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+);\n}\nlabel.checkbox.active .btn-default { filter: brightness(75%); }\n\nlabel.checkbox.disabled,\nlabel.checkbox.readonly,\n.btn.readonly {\n  filter: alpha(opacity=65);\n  box-shadow: none;\n  opacity: .65;\n}\nlabel.btn > input[type=checkbox] {\n  position: absolute;\n  clip: rect(0,0,0,0);\n  pointer-events: none;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\nlabel.checkbox[data-v-4320e89f] {\n  position: relative;\n  padding-left: 18px;\n}\nlabel.checkbox > input[data-v-4320e89f] {\n  box-sizing: border-box;\n  position: absolute;\n  z-index: -1;\n  padding: 0;\n  opacity: 0;\n  margin: 0;\n}\nlabel.checkbox > .icon[data-v-4320e89f] {\n  position: absolute;\n  top: .2rem;\n  left: 0;\n  display: block;\n  width: 1.4rem;\n  height: 1.4rem;\n  line-height:1rem;\n  text-align: center;\n  user-select: none;\n  border-radius: .35rem;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: 50% 50%;\n}\nlabel.checkbox:not(.active) > .icon[data-v-4320e89f] {\n  background-color: #ddd;\n  border: 1px solid #bbb;\n}\nlabel.checkbox > input:focus ~ .icon[data-v-4320e89f] {\n  outline: 0;\n  border: 1px solid #66afe9;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\nlabel.checkbox.active > .icon[data-v-4320e89f] {\n  background-size: 1rem 1rem;\n  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+);\n}\nlabel.checkbox.active .btn-default[data-v-4320e89f] { filter: brightness(75%);\n}\nlabel.checkbox.disabled[data-v-4320e89f],\nlabel.checkbox.readonly[data-v-4320e89f],\n.btn.readonly[data-v-4320e89f] {\n  filter: alpha(opacity=65);\n  box-shadow: none;\n  opacity: .65;\n}\nlabel.btn > input[type=checkbox][data-v-4320e89f] {\n  position: absolute;\n  clip: rect(0,0,0,0);\n  pointer-events: none;\n}\n", "", {"version":3,"sources":["/./src/Checkbox.vue?a80d4f54"],"names":[],"mappings":";AAuFA;EACA,mBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;EACA,mBAAA;EACA,YAAA;EACA,WAAA;EACA,WAAA;EACA,UAAA;CACA;AACA;EACA,mBAAA;EACA,WAAA;EACA,QAAA;EACA,eAAA;EACA,cAAA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,kBAAA;EACA,sBAAA;EACA,6BAAA;EACA,mCAAA;EACA,yBAAA;CACA;AACA;EACA,uBAAA;EACA,uBAAA;CACA;AACA;EACA,WAAA;EACA,0BAAA;EACA,0EAAA;CACA;AACA;EACA,2BAAA;EACA,kZAAA;CACA;AACA,sDAAA,wBAAA;CAAA;AAEA;;;EAGA,0BAAA;EACA,iBAAA;EACA,aAAA;CACA;AACA;EACA,mBAAA;EACA,oBAAA;EACA,qBAAA;CACA","file":"Checkbox.vue","sourcesContent":["<template>\n  <a :is=\"isButton?'a':'label'\" @click=\"toggle\" :class=\"[isButton?'btn btn-'+typeColor:'open checkbox '+typeColor,{active:checked,disabled:disabled,readonly:readonly}]\">\n    <input v-if=\"name\" type=\"hidden\" :name=\"name\" :value=\"checked?trueValue:falseValue\" />\n    <span v-if=\"!isButton\" class=\"icon dropdown-toggle\" :class=\"[checked?'btn-'+typeColor:'',{bg:typeColor==='default'}]\"></span>\n    <span v-if=\"!isButton&&checked&&typeColor==='default'\" class=\"icon\"></span>\n    <slot></slot>\n  </a>\n</template>\n\n<script>\nexport default {\n  props: {\n    button: {type: Boolean, default: false},\n    disabled: {type: Boolean, default: false},\n    falseValue: {default: false},\n    name: {type: String, default: null},\n    readonly: {type: Boolean, default: false},\n    trueValue: {default: true},\n    type: {type: String, default: null},\n    value: {default: false}\n  },\n  data () {\n    return {\n      checked: (this.value === this.trueValue)\n    }\n  },\n  computed: {\n    inGroup () { return this.$parent && this.$parent.btnGroup && !this.$parent._radioGroup },\n    isButton () { return this.button || (this.$parent && this.$parent.btnGroup && this.$parent.buttons) },\n    isFalse () { return this.value === this.falseValue },\n    isTrue () { return this.value === this.trueValue },\n    parentValue () { return this.$parent.val },\n    typeColor () { return (this.type || (this.$parent && this.$parent.type)) || 'default' }\n  },\n  watch: {\n    checked (val, old) {\n      var value = val ? this.trueValue : this.falseValue\n      this.$emit('checked', val)\n      this.$emit('input', value);\n      this.updateParent()\n    },\n    parentValue (val) {\n      this.updateFromParent();\n    },\n    value (val, old) {\n      var checked = val === this.trueValue\n      if (this.checked !== checked) {\n        this.checked = checked\n      }\n    }\n  },\n  created () {\n    if (this.inGroup) {\n      const parent = this.$parent\n      parent._checkboxGroup = true\n      if (!(parent.val instanceof Array)) { parent.val = [] }\n    }\n  },\n  mounted () {\n    this.updateFromParent();\n  },\n  methods: {\n    // called @ mounted(), or whenever $parent.val changes\n    // sync our state with the $parent.val\n    updateFromParent() {\n      if (this.inGroup) {\n        var index = this.$parent.val.indexOf(this.trueValue)\n        this.checked = ~index\n      }\n    },\n    // called when our checked state changes\n    updateParent() {\n      if (this.inGroup) {\n        var index = this.$parent.val.indexOf(this.trueValue)\n        if (this.checked && !~index) this.$parent.val.push(this.trueValue)\n        if (!this.checked && ~index) this.$parent.val.splice(index, 1)\n      }\n    },\n    toggle () {\n      if (this.disabled || this.readonly) { return }\n      this.checked = !this.checked\n    }\n  }\n}\n</script>\n\n<style scoped>\nlabel.checkbox {\n  position: relative;\n  padding-left: 18px;\n}\nlabel.checkbox > input {\n  box-sizing: border-box;\n  position: absolute;\n  z-index: -1;\n  padding: 0;\n  opacity: 0;\n  margin: 0;\n}\nlabel.checkbox > .icon {\n  position: absolute;\n  top: .2rem;\n  left: 0;\n  display: block;\n  width: 1.4rem;\n  height: 1.4rem;\n  line-height:1rem;\n  text-align: center;\n  user-select: none;\n  border-radius: .35rem;\n  background-repeat: no-repeat;\n  background-position: center center;\n  background-size: 50% 50%;\n}\nlabel.checkbox:not(.active) > .icon {\n  background-color: #ddd;\n  border: 1px solid #bbb;\n}\nlabel.checkbox > input:focus ~ .icon {\n  outline: 0;\n  border: 1px solid #66afe9;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\nlabel.checkbox.active > .icon {\n  background-size: 1rem 1rem;\n  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+);\n}\nlabel.checkbox.active .btn-default { filter: brightness(75%); }\n\nlabel.checkbox.disabled,\nlabel.checkbox.readonly,\n.btn.readonly {\n  filter: alpha(opacity=65);\n  box-shadow: none;\n  opacity: .65;\n}\nlabel.btn > input[type=checkbox] {\n  position: absolute;\n  clip: rect(0,0,0,0);\n  pointer-events: none;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -4103,7 +4180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-841aa106", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-4320e89f", module.exports)
 	  }
 	}
 
@@ -4133,7 +4210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Datepicker.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Datepicker.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -4144,9 +4221,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-afde6714", __vue_options__)
+	    hotAPI.createRecord("data-v-cad575d0", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-afde6714", __vue_options__)
+	    hotAPI.reload("data-v-cad575d0", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Datepicker.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -4170,8 +4247,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-afde6714!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Datepicker.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-afde6714!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Datepicker.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-cad575d0!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Datepicker.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-cad575d0!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Datepicker.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -4610,7 +4687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.preNextMonthClick(0)
+	        return _vm.preNextMonthClick(0)
 	      }
 	    }
 	  }), _vm._v(" "), _c('span', {
@@ -4620,7 +4697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.preNextMonthClick(1)
+	        return _vm.preNextMonthClick(1)
 	      }
 	    }
 	  }), _vm._v(" "), _c('p', {
@@ -4631,18 +4708,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    staticClass: "datepicker-weekRange"
 	  }, _vm._l((_vm.text.daysOfWeek), function(w) {
 	    return _c('span', [_vm._v(_vm._s(w))])
-	  })), _vm._v(" "), _c('div', {
+	  }), 0), _vm._v(" "), _c('div', {
 	    staticClass: "datepicker-dateRange"
 	  }, _vm._l((_vm.dateRange), function(d) {
 	    return _c('span', {
 	      class: d.sclass,
 	      on: {
 	        "click": function($event) {
-	          _vm.daySelect(d)
+	          return _vm.daySelect(d)
 	        }
 	      }
 	    }, [_vm._v(_vm._s(d.text))])
-	  }))])])]), _vm._v(" "), _c('div', {
+	  }), 0)])])]), _vm._v(" "), _c('div', {
 	    directives: [{
 	      name: "show",
 	      rawName: "v-show",
@@ -4663,7 +4740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.preNextYearClick(0)
+	        return _vm.preNextYearClick(0)
 	      }
 	    }
 	  }), _vm._v(" "), _c('span', {
@@ -4673,7 +4750,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.preNextYearClick(1)
+	        return _vm.preNextYearClick(1)
 	      }
 	    }
 	  }), _vm._v(" "), _c('p', {
@@ -4694,7 +4771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      on: {
 	        "click": function($event) {
-	          _vm.monthSelect(index)
+	          return _vm.monthSelect(index)
 	        }
 	      }
 	    })]
@@ -4719,7 +4796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.preNextDecadeClick(0)
+	        return _vm.preNextDecadeClick(0)
 	      }
 	    }
 	  }), _vm._v(" "), _c('span', {
@@ -4729,7 +4806,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.preNextDecadeClick(1)
+	        return _vm.preNextDecadeClick(1)
 	      }
 	    }
 	  }), _vm._v(" "), _c('p', [_vm._v(_vm._s(_vm.stringifyDecadeHeader(_vm.currDate)))])]), _vm._v(" "), _c('div', {
@@ -4745,7 +4822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      on: {
 	        "click": function($event) {
 	          $event.stopPropagation();
-	          _vm.yearSelect(decade.text)
+	          return _vm.yearSelect(decade.text)
 	        }
 	      }
 	    })]
@@ -4754,7 +4831,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-afde6714", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-cad575d0", module.exports)
 	  }
 	}
 
@@ -4781,7 +4858,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Dropdown.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Dropdown.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -4792,9 +4869,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-e2e3fe6a", __vue_options__)
+	    hotAPI.createRecord("data-v-13bc39ed", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-e2e3fe6a", __vue_options__)
+	    hotAPI.reload("data-v-13bc39ed", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -4942,12 +5019,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "keyup": function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "esc", 27)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) { return null; }
 	        _vm.show = false
 	      },
 	      "click": function($event) {
 	        $event.preventDefault();
-	        _vm.toggle($event)
+	        return _vm.toggle($event)
 	      }
 	    }
 	  }, [_vm._t("button", [_vm._v(_vm._s(_vm.text))]), _vm._v(" "), _c('span', {
@@ -4960,12 +5037,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "keyup": function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "esc", 27)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) { return null; }
 	        _vm.show = false
 	      },
 	      "click": function($event) {
 	        $event.preventDefault();
-	        _vm.toggle($event)
+	        return _vm.toggle($event)
 	      }
 	    }
 	  }, [_vm._t("button", [_vm._v(_vm._s(_vm.text))]), _vm._v(" "), _c('span', {
@@ -4977,7 +5054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-e2e3fe6a", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-13bc39ed", module.exports)
 	  }
 	}
 
@@ -5004,7 +5081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/FormGroup.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/FormGroup.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -5015,9 +5092,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-81cd4a5e", __vue_options__)
+	    hotAPI.createRecord("data-v-409b7422", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-81cd4a5e", __vue_options__)
+	    hotAPI.reload("data-v-409b7422", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] FormGroup.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -5121,7 +5198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-81cd4a5e", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-409b7422", module.exports)
 	  }
 	}
 
@@ -5148,7 +5225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/FormValidator.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/FormValidator.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -5159,9 +5236,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-1a8aa124", __vue_options__)
+	    hotAPI.createRecord("data-v-205ccd42", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-1a8aa124", __vue_options__)
+	    hotAPI.reload("data-v-205ccd42", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] FormValidator.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -5250,7 +5327,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-1a8aa124", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-205ccd42", module.exports)
 	  }
 	}
 
@@ -5280,10 +5357,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Input.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Input.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-	__vue_options__._scopeId = "data-v-24ab6e00"
+	__vue_options__._scopeId = "data-v-1742981e"
 	
 	/* hot reload */
 	if (false) {(function () {
@@ -5292,9 +5369,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-24ab6e00", __vue_options__)
+	    hotAPI.createRecord("data-v-1742981e", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-24ab6e00", __vue_options__)
+	    hotAPI.reload("data-v-1742981e", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Input.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -5318,8 +5395,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-24ab6e00&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Input.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-24ab6e00&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Input.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-1742981e&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Input.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-1742981e&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Input.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -5337,7 +5414,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "\n.form-group[data-v-24ab6e00] {\n  position: relative;\n}\nlabel~.close[data-v-24ab6e00] {\n  top: 25px;\n}\n.input-group>.icon[data-v-24ab6e00] {\n  position: relative;\n  display: table-cell;\n  width:0;\n  z-index: 3;\n}\n.close[data-v-24ab6e00] {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.has-feedback .close[data-v-24ab6e00] {\n  right: 20px;\n}\n", "", {"version":3,"sources":["/./src/Input.vue?66e59950"],"names":[],"mappings":";AA0QA;EACA,mBAAA;CACA;AACA;EACA,UAAA;CACA;AACA;EACA,mBAAA;EACA,oBAAA;EACA,QAAA;EACA,WAAA;CACA;AACA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;EACA,WAAA;EACA,eAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;CACA;AACA;EACA,YAAA;CACA","file":"Input.vue","sourcesContent":["<template>\n  <div class=\"form-group\" :class=\"{validate:canValidate,'has-feedback':icon,'has-error':canValidate&&valid===false,'has-success':canValidate&&valid}\">\n    <slot name=\"label\"><label v-if=\"label\" class=\"control-label\" @click=\"focus\">{{label}}</label></slot>\n    <div v-if=\"$slots.before||$slots.after\" class=\"input-group\">\n      <slot name=\"before\"></slot>\n      <textarea :is=\"type=='textarea'?type:'input'\" class=\"form-control\" ref=\"input\"\n        :cols=\"cols\"\n        :disabled=\"disabled\"\n        :list=\"id_datalist\"\n        :max=\"attr(max)\"\n        :maxlength=\"maxlength\"\n        :min=\"attr(min)\"\n        :name=\"name\"\n        :placeholder=\"placeholder\"\n        :readonly=\"readonly\"\n        :required=\"required\"\n        :rows=\"rows\"\n        :step=\"step\"\n        :title=\"attr(title)\"\n        :type=\"type=='textarea'?null:type\"\n        v-model=\"val\"\n        @blur=\"emit\" @focus=\"emit\" @input=\"emit\"\n        @keyup.enter=\"type!='textarea'&&enterSubmit&&submit()\"\n      ></textarea>\n      <div v-if=\"clearButton && value\" :class=\"{icon:icon}\">\n        <span class=\"close\" @click=\"value = ''\">&times;</span>\n      </div>\n      <div v-if=\"icon\" class=\"icon\">\n        <span v-if=\"icon&&valid!==null\" :class=\"['form-control-feedback glyphicon','glyphicon-'+(valid?'ok':'remove')]\" aria-hidden=\"true\"></span>\n      </div>\n      <slot name=\"after\"></slot>\n    </div>\n    <template v-else>\n      <textarea :is=\"type=='textarea'?type:'input'\" class=\"form-control\" ref=\"input\"\n        :cols=\"cols\"\n        :disabled=\"disabled\"\n        :list=\"id_datalist\"\n        :max=\"attr(max)\"\n        :maxlength=\"maxlength\"\n        :min=\"attr(min)\"\n        :name=\"name\"\n        :placeholder=\"placeholder\"\n        :readonly=\"readonly\"\n        :required=\"required\"\n        :rows=\"rows\"\n        :step=\"step\"\n        :title=\"attr(title)\"\n        :type=\"type=='textarea'?null:type\"\n        v-model=\"val\"\n        @blur=\"emit\" @focus=\"emit\" @input=\"emit\"\n        @keyup.enter=\"type!='textarea'&&enterSubmit&&submit()\"\n      ></textarea>\n      <span v-if=\"clearButton && val\" class=\"close\" @click=\"val = ''\">&times;</span>\n      <span v-if=\"icon&&valid!==null\" :class=\"['form-control-feedback glyphicon','glyphicon-'+(valid?'ok':'remove')]\" aria-hidden=\"true\"></span>\n    </template>\n    <datalist v-if=\"id_datalist\" :id=\"id_datalist\">\n      <option v-for=\"opc in options\" :value=\"opc\"></option>\n    </datalist>\n    <div v-if=\"showHelp\" class=\"help-block\" @click=\"focus\">{{help}}</div>\n    <div v-if=\"showError\" class=\"help-block with-errors\" @click=\"focus\">{{errorText}}</div>\n  </div>\n</template>\n\n<script>\nimport {coerce, delayer, translations} from './utils/utils.js'\nimport $ from './utils/NodeList.js'\n\nvar DELAY = 300\n\nexport default {\n  props: {\n    clearButton: {type: Boolean, default: false},\n    cols: {type: Number, default: null},\n    datalist: {type: Array, default: null},\n    disabled: {type: Boolean, default: false},\n    enterSubmit: {type: Boolean, default: false},\n    error: {type: String, default: null},\n    help: {type: String, default: null},\n    hideHelp: {type: Boolean, default: true},\n    icon: {type: Boolean, default: false},\n    label: {type: String, default: null},\n    lang: {type: String, default: navigator.language},\n    mask: null,\n    maskDelay: {type: Number, default: 100},\n    match: {type: String, default: null},\n    max: {type: String, default: null},\n    maxlength: {type: Number, default: null},\n    min: {type: String, default: null},\n    minlength: {type: Number, default: 0},\n    name: {type: String, default: null},\n    pattern: {default: null},\n    placeholder: {type: String, default: null},\n    readonly: {type: Boolean, default: false},\n    required: {type: Boolean, default: false},\n    rows: {type: Number, default: 3},\n    step: {type: Number, default: null},\n    type: {type: String, default: 'text'},\n    url: {type: String, default: null},\n    urlMap: {type: Function, default: null},\n    validationDelay: {type: Number, default: 250},\n    value: {default: null}\n  },\n  data () {\n    var val = this.value\n    return {\n      options: this.datalist,\n      val,\n      valid: null,\n      timeout: null\n    }\n  },\n  computed: {\n    canValidate () { return !this.disabled && !this.readonly && (this.required || this.regex || this.nativeValidate || this.match !== null) },\n    errorText () {\n      let value = this.value\n      let error = [this.error]\n      if (!value && this.required) error.push('(' + this.text.required.toLowerCase() + ')')\n      if (value && (value.length < this.minlength)) error.push('(' + this.text.minLength.toLowerCase() + ': ' + this.minlength + ')')\n      return error.join(' ')\n    },\n    id_datalist () {\n      if (this.type !== 'textarea' && this.datalist instanceof Array) {\n        if (!this._id_datalist) {\n          if (!this.$root.id_datalist) { this.$root.id_datalist = 0 }\n          this._id_datalist = 'input-datalist' + this.$root.id_datalist++\n        }\n        return this._id_datalist\n      }\n      return null\n    },\n    input () { return this.$refs.input },\n    nativeValidate () { return (this.input || {}).checkValidity && (~['url', 'email'].indexOf(this.type.toLowerCase()) || this.min || this.max) },\n    regex () { return coerce.pattern(this.pattern) },\n    showError () { return this.error && this.valid === false },\n    showHelp () { return this.help && (!this.showError || !this.hideHelp) },\n    text () { return translations(this.lang) },\n    title () { return this.errorText || this.help || '' }\n  },\n  watch: {\n    datalist (val, old) {\n      if (val !== old && val instanceof Array) { this.options = val }\n    },\n    match (val) { this.eval() },\n    options (val, old) {\n      if (val !== old) this.$emit('options', val)\n    },\n    url (val) {\n      this._url()\n    },\n    val (val, old) {\n      this.$emit('input', val)\n      if (val !== old) {\n        if (this.mask instanceof Function) {\n          val = this.mask(val || '')\n          if (this.val !== val) {\n            if (this._timeout.mask) clearTimeout(this._timeout.mask)\n            this._timeout.mask = setTimeout(() => {\n              this.val = val\n            }, isNaN(this.maskDelay) ? 0 : this.maskDelay)\n          }\n        }\n        this.eval()\n      }\n    },\n    valid (val, old) {\n      this.$emit('isvalid', val)\n      this.$emit(!val ? 'invalid' : 'valid')\n      if (this._parent) this._parent.validate()\n    },\n    value (val) {\n      if (this.val !== val) { this.val = val }\n    }\n  },\n  methods: {\n    attr (value) {\n      return ~['', null, undefined].indexOf(value) || value instanceof Function ? null : value\n    },\n    emit (e) {\n      this.$emit(e.type, e.type == 'input' ? e.target.value : e)\n      if (e.type === 'blur' && this.canValidate) { this.valid = this.validate() }\n    },\n    eval () {\n      if (this._timeout.eval) clearTimeout(this._timeout.eval)\n      if (!this.canValidate) {\n        this.valid = true\n      } else {\n        this._timeout.eval = setTimeout(() => {\n          this.valid = this.validate()\n          this._timeout.eval = null\n        }, this.validationDelay)\n      }\n    },\n    focus () { this.input.focus() },\n    submit () {\n      if (this.$parent._formValidator) {\n        return this.$parent.validate()\n      }\n      if (this.input.form) {\n        const invalids = $('.form-group.validate:not(.has-success)', this.input.form)\n        if (invalids.length) {\n          invalids.find('input,textarea,select')[0].focus()\n        } else {\n          this.input.form.submit()\n        }\n      }\n    },\n    validate () {\n      if (!this.canValidate) { return true }\n      let value = (this.val || '').trim()\n      if (!value) { return !this.required }\n      if (this.match !== null) { return this.match === value }\n      if (value.length < this.minlength) { return false }\n      if (this.nativeValidate && !this.input.checkValidity()) { return false }\n      if (this.regex) {\n        if (!(this.regex instanceof Function ? this.regex(this.val) : this.regex.test(this.val))) { return false }\n      }\n      return true\n    },\n    reset() {\n      this.value = ''\n      this.valid = null\n      if (this._timeout.mask) clearTimeout(this._timeout.mask)\n      if (this._timeout.eval) clearTimeout(this._timeout.eval)\n    }\n  },\n  created () {\n    this._input = true\n    this._timeout = {}\n    let parent = this.$parent\n    while (parent && !parent._formValidator) { parent = parent.$parent }\n    if (parent && parent._formValidator) {\n      parent.children.push(this)\n      this._parent = parent\n    }\n    this._url = delayer(function () {\n      if (!this.url || !this.$http || this._loading) { return }\n      this._loading = true\n      this.$http.get(this.url).then(response => {\n        var data = response.data instanceof Array ? response.data : []\n        try { data = JSON.parse(data) } catch (e) {}\n        if (this.urlMap) { data = data.map(this.urlMap) }\n        this.options = data\n        this.loading = false\n      }, response => {\n        this.loading = false\n      })\n    }, DELAY)\n    if (this.url) this._url()\n  },\n  mounted () {\n    // $(this.input).on('focus', e => { this.$emit('focus', e) }).on('blur', e => {\n    //   if (this.canValidate) { this.valid = this.validate() }\n    //   this.$emit('blur', e)\n    // })\n  },\n  beforeDestroy () {\n    // $(this.input).off()\n    if (this._parent) {\n      var index = this._parent.children.indexOf(this)\n      this._parent.children.splice(index, 1)\n    }\n  }\n}\n</script>\n\n<style scoped>\n.form-group {\n  position: relative;\n}\nlabel~.close {\n  top: 25px;\n}\n.input-group>.icon {\n  position: relative;\n  display: table-cell;\n  width:0;\n  z-index: 3;\n}\n.close {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.has-feedback .close {\n  right: 20px;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.form-group[data-v-1742981e] {\n  position: relative;\n}\nlabel~.close[data-v-1742981e] {\n  top: 25px;\n}\n.input-group>.icon[data-v-1742981e] {\n  position: relative;\n  display: table-cell;\n  width:0;\n  z-index: 3;\n}\n.close[data-v-1742981e] {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.has-feedback .close[data-v-1742981e] {\n  right: 20px;\n}\n", "", {"version":3,"sources":["/./src/Input.vue?66e59950"],"names":[],"mappings":";AA0QA;EACA,mBAAA;CACA;AACA;EACA,UAAA;CACA;AACA;EACA,mBAAA;EACA,oBAAA;EACA,QAAA;EACA,WAAA;CACA;AACA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;EACA,WAAA;EACA,eAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;CACA;AACA;EACA,YAAA;CACA","file":"Input.vue","sourcesContent":["<template>\n  <div class=\"form-group\" :class=\"{validate:canValidate,'has-feedback':icon,'has-error':canValidate&&valid===false,'has-success':canValidate&&valid}\">\n    <slot name=\"label\"><label v-if=\"label\" class=\"control-label\" @click=\"focus\">{{label}}</label></slot>\n    <div v-if=\"$slots.before||$slots.after\" class=\"input-group\">\n      <slot name=\"before\"></slot>\n      <textarea :is=\"type=='textarea'?type:'input'\" class=\"form-control\" ref=\"input\"\n        :cols=\"cols\"\n        :disabled=\"disabled\"\n        :list=\"id_datalist\"\n        :max=\"attr(max)\"\n        :maxlength=\"maxlength\"\n        :min=\"attr(min)\"\n        :name=\"name\"\n        :placeholder=\"placeholder\"\n        :readonly=\"readonly\"\n        :required=\"required\"\n        :rows=\"rows\"\n        :step=\"step\"\n        :title=\"attr(title)\"\n        :type=\"type=='textarea'?null:type\"\n        v-model=\"val\"\n        @blur=\"emit\" @focus=\"emit\" @input=\"emit\"\n        @keyup.enter=\"type!='textarea'&&enterSubmit&&submit()\"\n      ></textarea>\n      <div v-if=\"clearButton && value\" :class=\"{icon:icon}\">\n        <span class=\"close\" @click=\"value = ''\">&times;</span>\n      </div>\n      <div v-if=\"icon\" class=\"icon\">\n        <span v-if=\"icon&&valid!==null\" :class=\"['form-control-feedback glyphicon','glyphicon-'+(valid?'ok':'remove')]\" aria-hidden=\"true\"></span>\n      </div>\n      <slot name=\"after\"></slot>\n    </div>\n    <template v-else>\n      <textarea :is=\"type=='textarea'?type:'input'\" class=\"form-control\" ref=\"input\"\n        :cols=\"cols\"\n        :disabled=\"disabled\"\n        :list=\"id_datalist\"\n        :max=\"attr(max)\"\n        :maxlength=\"maxlength\"\n        :min=\"attr(min)\"\n        :name=\"name\"\n        :placeholder=\"placeholder\"\n        :readonly=\"readonly\"\n        :required=\"required\"\n        :rows=\"rows\"\n        :step=\"step\"\n        :title=\"attr(title)\"\n        :type=\"type=='textarea'?null:type\"\n        v-model=\"val\"\n        @blur=\"emit\" @focus=\"emit\" @input=\"emit\"\n        @keyup.enter=\"type!='textarea'&&enterSubmit&&submit()\"\n      ></textarea>\n      <span v-if=\"clearButton && val\" class=\"close\" @click=\"val = ''\">&times;</span>\n      <span v-if=\"icon&&valid!==null\" :class=\"['form-control-feedback glyphicon','glyphicon-'+(valid?'ok':'remove')]\" aria-hidden=\"true\"></span>\n    </template>\n    <datalist v-if=\"id_datalist\" :id=\"id_datalist\">\n      <option v-for=\"opc in options\" :value=\"opc\"></option>\n    </datalist>\n    <div v-if=\"showHelp\" class=\"help-block\" @click=\"focus\">{{help}}</div>\n    <div v-if=\"showError\" class=\"help-block with-errors\" @click=\"focus\">{{errorText}}</div>\n  </div>\n</template>\n\n<script>\nimport {coerce, delayer, translations} from './utils/utils.js'\nimport $ from './utils/NodeList.js'\n\nvar DELAY = 300\n\nexport default {\n  props: {\n    clearButton: {type: Boolean, default: false},\n    cols: {type: Number, default: null},\n    datalist: {type: Array, default: null},\n    disabled: {type: Boolean, default: false},\n    enterSubmit: {type: Boolean, default: false},\n    error: {type: String, default: null},\n    help: {type: String, default: null},\n    hideHelp: {type: Boolean, default: true},\n    icon: {type: Boolean, default: false},\n    label: {type: String, default: null},\n    lang: {type: String, default: navigator.language},\n    mask: null,\n    maskDelay: {type: Number, default: 100},\n    match: {type: String, default: null},\n    max: {type: String, default: null},\n    maxlength: {type: Number, default: null},\n    min: {type: String, default: null},\n    minlength: {type: Number, default: 0},\n    name: {type: String, default: null},\n    pattern: {default: null},\n    placeholder: {type: String, default: null},\n    readonly: {type: Boolean, default: false},\n    required: {type: Boolean, default: false},\n    rows: {type: Number, default: 3},\n    step: {type: Number, default: null},\n    type: {type: String, default: 'text'},\n    url: {type: String, default: null},\n    urlMap: {type: Function, default: null},\n    validationDelay: {type: Number, default: 250},\n    value: {default: null}\n  },\n  data () {\n    var val = this.value\n    return {\n      options: this.datalist,\n      val,\n      valid: null,\n      timeout: null\n    }\n  },\n  computed: {\n    canValidate () { return !this.disabled && !this.readonly && (this.required || this.regex || this.nativeValidate || this.match !== null) },\n    errorText () {\n      let value = this.value\n      let error = [this.error]\n      if (!value && this.required) error.push('(' + this.text.required.toLowerCase() + ')')\n      if (value && (value.length < this.minlength)) error.push('(' + this.text.minLength.toLowerCase() + ': ' + this.minlength + ')')\n      return error.join(' ')\n    },\n    id_datalist () {\n      if (this.type !== 'textarea' && this.datalist instanceof Array) {\n        if (!this._id_datalist) {\n          if (!this.$root.id_datalist) { this.$root.id_datalist = 0 }\n          this._id_datalist = 'input-datalist' + this.$root.id_datalist++\n        }\n        return this._id_datalist\n      }\n      return null\n    },\n    input () { return this.$refs.input },\n    nativeValidate () { return (this.input || {}).checkValidity && (~['url', 'email'].indexOf(this.type.toLowerCase()) || this.min || this.max) },\n    regex () { return coerce.pattern(this.pattern) },\n    showError () { return this.error && this.valid === false },\n    showHelp () { return this.help && (!this.showError || !this.hideHelp) },\n    text () { return translations(this.lang) },\n    title () { return this.errorText || this.help || '' }\n  },\n  watch: {\n    datalist (val, old) {\n      if (val !== old && val instanceof Array) { this.options = val }\n    },\n    match (val) { this.eval() },\n    options (val, old) {\n      if (val !== old) this.$emit('options', val)\n    },\n    url (val) {\n      this._url()\n    },\n    val (val, old) {\n      this.$emit('input', val)\n      if (val !== old) {\n        if (this.mask instanceof Function) {\n          val = this.mask(val || '')\n          if (this.val !== val) {\n            if (this._timeout.mask) clearTimeout(this._timeout.mask)\n            this._timeout.mask = setTimeout(() => {\n              this.val = val\n            }, isNaN(this.maskDelay) ? 0 : this.maskDelay)\n          }\n        }\n        this.eval()\n      }\n    },\n    valid (val, old) {\n      this.$emit('isvalid', val)\n      this.$emit(!val ? 'invalid' : 'valid')\n      if (this._parent) this._parent.validate()\n    },\n    value (val) {\n      if (this.val !== val) { this.val = val }\n    }\n  },\n  methods: {\n    attr (value) {\n      return ~['', null, undefined].indexOf(value) || value instanceof Function ? null : value\n    },\n    emit (e) {\n      this.$emit(e.type, e.type == 'input' ? e.target.value : e)\n      if (e.type === 'blur' && this.canValidate) { this.valid = this.validate() }\n    },\n    eval () {\n      if (this._timeout.eval) clearTimeout(this._timeout.eval)\n      if (!this.canValidate) {\n        this.valid = true\n      } else {\n        this._timeout.eval = setTimeout(() => {\n          this.valid = this.validate()\n          this._timeout.eval = null\n        }, this.validationDelay)\n      }\n    },\n    focus () { this.input.focus() },\n    submit () {\n      if (this.$parent._formValidator) {\n        return this.$parent.validate()\n      }\n      if (this.input.form) {\n        const invalids = $('.form-group.validate:not(.has-success)', this.input.form)\n        if (invalids.length) {\n          invalids.find('input,textarea,select')[0].focus()\n        } else {\n          this.input.form.submit()\n        }\n      }\n    },\n    validate () {\n      if (!this.canValidate) { return true }\n      let value = (this.val || '').trim()\n      if (!value) { return !this.required }\n      if (this.match !== null) { return this.match === value }\n      if (value.length < this.minlength) { return false }\n      if (this.nativeValidate && !this.input.checkValidity()) { return false }\n      if (this.regex) {\n        if (!(this.regex instanceof Function ? this.regex(this.val) : this.regex.test(this.val))) { return false }\n      }\n      return true\n    },\n    reset() {\n      this.value = ''\n      this.valid = null\n      if (this._timeout.mask) clearTimeout(this._timeout.mask)\n      if (this._timeout.eval) clearTimeout(this._timeout.eval)\n    }\n  },\n  created () {\n    this._input = true\n    this._timeout = {}\n    let parent = this.$parent\n    while (parent && !parent._formValidator) { parent = parent.$parent }\n    if (parent && parent._formValidator) {\n      parent.children.push(this)\n      this._parent = parent\n    }\n    this._url = delayer(function () {\n      if (!this.url || !this.$http || this._loading) { return }\n      this._loading = true\n      this.$http.get(this.url).then(response => {\n        var data = response.data instanceof Array ? response.data : []\n        try { data = JSON.parse(data) } catch (e) {}\n        if (this.urlMap) { data = data.map(this.urlMap) }\n        this.options = data\n        this.loading = false\n      }, response => {\n        this.loading = false\n      })\n    }, DELAY)\n    if (this.url) this._url()\n  },\n  mounted () {\n    // $(this.input).on('focus', e => { this.$emit('focus', e) }).on('blur', e => {\n    //   if (this.canValidate) { this.valid = this.validate() }\n    //   this.$emit('blur', e)\n    // })\n  },\n  beforeDestroy () {\n    // $(this.input).off()\n    if (this._parent) {\n      var index = this._parent.children.indexOf(this)\n      this._parent.children.splice(index, 1)\n    }\n  }\n}\n</script>\n\n<style scoped>\n.form-group {\n  position: relative;\n}\nlabel~.close {\n  top: 25px;\n}\n.input-group>.icon {\n  position: relative;\n  display: table-cell;\n  width:0;\n  z-index: 3;\n}\n.close {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.has-feedback .close {\n  right: 20px;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -5694,12 +5771,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, [_vm._v(_vm._s(_vm.label))]) : _vm._e()]), _vm._v(" "), (_vm.$slots.before || _vm.$slots.after) ? _c('div', {
 	    staticClass: "input-group"
 	  }, [_vm._t("before"), _vm._v(" "), _c(_vm.type == 'textarea' ? _vm.type : 'input', {
-	    directives: [{
-	      name: "model",
-	      rawName: "v-model",
-	      value: (_vm.val),
-	      expression: "val"
-	    }],
 	    ref: "input",
 	    tag: "textarea",
 	    staticClass: "form-control",
@@ -5719,20 +5790,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "title": _vm.attr(_vm.title),
 	      "type": _vm.type == 'textarea' ? null : _vm.type
 	    },
-	    domProps: {
-	      "value": (_vm.val)
-	    },
 	    on: {
 	      "blur": _vm.emit,
 	      "focus": _vm.emit,
-	      "input": [function($event) {
-	        if ($event.target.composing) { return; }
-	        _vm.val = $event.target.value
-	      }, _vm.emit],
+	      "input": _vm.emit,
 	      "keyup": function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) { return null; }
 	        _vm.type != 'textarea' && _vm.enterSubmit && _vm.submit()
 	      }
+	    },
+	    model: {
+	      value: (_vm.val),
+	      callback: function($$v) {
+	        _vm.val = $$v
+	      },
+	      expression: "val"
 	    }
 	  }), _vm._v(" "), (_vm.clearButton && _vm.value) ? _c('div', {
 	    class: {
@@ -5753,12 +5825,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "aria-hidden": "true"
 	    }
 	  }) : _vm._e()]) : _vm._e(), _vm._v(" "), _vm._t("after")], 2) : [_c(_vm.type == 'textarea' ? _vm.type : 'input', {
-	    directives: [{
-	      name: "model",
-	      rawName: "v-model",
-	      value: (_vm.val),
-	      expression: "val"
-	    }],
 	    ref: "input",
 	    tag: "textarea",
 	    staticClass: "form-control",
@@ -5778,20 +5844,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "title": _vm.attr(_vm.title),
 	      "type": _vm.type == 'textarea' ? null : _vm.type
 	    },
-	    domProps: {
-	      "value": (_vm.val)
-	    },
 	    on: {
 	      "blur": _vm.emit,
 	      "focus": _vm.emit,
-	      "input": [function($event) {
-	        if ($event.target.composing) { return; }
-	        _vm.val = $event.target.value
-	      }, _vm.emit],
+	      "input": _vm.emit,
 	      "keyup": function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) { return null; }
 	        _vm.type != 'textarea' && _vm.enterSubmit && _vm.submit()
 	      }
+	    },
+	    model: {
+	      value: (_vm.val),
+	      callback: function($$v) {
+	        _vm.val = $$v
+	      },
+	      expression: "val"
 	    }
 	  }), _vm._v(" "), (_vm.clearButton && _vm.val) ? _c('span', {
 	    staticClass: "close",
@@ -5815,7 +5882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "value": opc
 	      }
 	    })
-	  })) : _vm._e(), _vm._v(" "), (_vm.showHelp) ? _c('div', {
+	  }), 0) : _vm._e(), _vm._v(" "), (_vm.showHelp) ? _c('div', {
 	    staticClass: "help-block",
 	    on: {
 	      "click": _vm.focus
@@ -5830,7 +5897,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-24ab6e00", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-1742981e", module.exports)
 	  }
 	}
 
@@ -5860,7 +5927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Modal.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Modal.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -5871,9 +5938,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-4041e763", __vue_options__)
+	    hotAPI.createRecord("data-v-32d91181", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-4041e763", __vue_options__)
+	    hotAPI.reload("data-v-32d91181", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -5897,8 +5964,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4041e763!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4041e763!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-32d91181!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-32d91181!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -6058,6 +6125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(125);
 	module.exports = __webpack_require__(7).Number.isInteger;
 
+
 /***/ }),
 /* 125 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -6065,18 +6133,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	// 20.1.2.3 Number.isInteger(number)
 	var $export = __webpack_require__(5);
 	
-	$export($export.S, 'Number', {isInteger: __webpack_require__(126)});
+	$export($export.S, 'Number', { isInteger: __webpack_require__(126) });
+
 
 /***/ }),
 /* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 20.1.2.3 Number.isInteger(number)
-	var isObject = __webpack_require__(13)
-	  , floor    = Math.floor;
-	module.exports = function isInteger(it){
+	var isObject = __webpack_require__(13);
+	var floor = Math.floor;
+	module.exports = function isInteger(it) {
 	  return !isObject(it) && isFinite(it) && floor(it) === it;
 	};
+
 
 /***/ }),
 /* 127 */
@@ -6110,7 +6180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    on: {
 	      "click": function($event) {
 	        $event.stopPropagation();
-	        _vm.action(null)
+	        return _vm.action(null)
 	      }
 	    }
 	  }, [_c('div', {
@@ -6124,7 +6194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.action(false, 2)
+	        return _vm.action(false, 2)
 	      }
 	    }
 	  }, [_c('span', [_vm._v("×")])]), _vm._v(" "), _c('h4', {
@@ -6140,7 +6210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.action(false, 3)
+	        return _vm.action(false, 3)
 	      }
 	    }
 	  }, [_vm._v(_vm._s(_vm.cancelText))]), _vm._v(" "), _c('button', {
@@ -6150,7 +6220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "click": function($event) {
-	        _vm.action(true, 4)
+	        return _vm.action(true, 4)
 	      }
 	    }
 	  }, [_vm._v(_vm._s(_vm.okText))])])])], 2)])])
@@ -6158,7 +6228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-4041e763", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-32d91181", module.exports)
 	  }
 	}
 
@@ -6185,7 +6255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Navbar.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Navbar.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -6196,9 +6266,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-141a01ca", __vue_options__)
+	    hotAPI.createRecord("data-v-74681b6c", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-141a01ca", __vue_options__)
+	    hotAPI.reload("data-v-74681b6c", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Navbar.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -6371,7 +6441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-141a01ca", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-74681b6c", module.exports)
 	  }
 	}
 
@@ -6398,7 +6468,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Option.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Option.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -6409,9 +6479,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-729ab3af", __vue_options__)
+	    hotAPI.createRecord("data-v-5a2e655e", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-729ab3af", __vue_options__)
+	    hotAPI.reload("data-v-5a2e655e", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Option.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -6461,7 +6531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-729ab3af", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-5a2e655e", module.exports)
 	  }
 	}
 
@@ -6491,7 +6561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Panel.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Panel.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -6502,9 +6572,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-6690733a", __vue_options__)
+	    hotAPI.createRecord("data-v-59279d58", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-6690733a", __vue_options__)
+	    hotAPI.reload("data-v-59279d58", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Panel.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -6528,8 +6598,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-6690733a!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Panel.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-6690733a!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Panel.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-59279d58!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Panel.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-59279d58!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Panel.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -6674,7 +6744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-6690733a", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-59279d58", module.exports)
 	  }
 	}
 
@@ -6704,7 +6774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Popover.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Popover.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -6715,9 +6785,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-0619dfdb", __vue_options__)
+	    hotAPI.createRecord("data-v-a0e20b0e", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-0619dfdb", __vue_options__)
+	    hotAPI.reload("data-v-a0e20b0e", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Popover.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -6741,8 +6811,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-0619dfdb!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Popover.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-0619dfdb!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Popover.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-a0e20b0e!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Popover.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-a0e20b0e!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Popover.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -6835,7 +6905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  computed: {
 	    events: function events() {
-	      return { contextmenu: ['contextmenu'], hover: ['mouseleave', 'mouseenter'], focus: ['blur', 'focus'] }[this.trigger] || ['click'];
+	      return { contextmenu: { toggle: ['contextmenu'] }, hover: { hide: ['mouseleave'], show_: ['mouseenter'] }, focus: { hide: ['blur'], show_: ['focus'] } }[this.trigger] || { toggle: ['click'] };
 	    }
 	  },
 	  methods: {
@@ -6877,10 +6947,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        popover.style.left = _this2.left + 'px';
 	      });
 	    },
-	    toggle: function toggle(e) {
+	    setVisibility: function setVisibility(vis, e) {
 	      if (e && this.trigger === 'contextmenu') e.preventDefault();
-	      this.show = !this.show;
-	      if (this.show) this.beforeEnter();
+	      var prevVis = this.show;
+	      this.show = vis;
+	      if (!prevVis && this.show) this.beforeEnter();
+	    },
+	    toggle: function toggle(e) {
+	      this.setVisibility(!this.show, e);
+	    },
+	    show_: function show_(e) {
+	      this.setVisibility(true, e);
+	    },
+	    hide: function hide(e) {
+	      this.setVisibility(false, e);
 	    }
 	  },
 	  mounted: function mounted() {
@@ -6895,8 +6975,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 	    }
-	    this.events.forEach(function (event) {
-	      (0, _NodeList2.default)(trigger).on(event, _this3.toggle);
+	
+	    ['show_', 'hide', 'toggle'].forEach(function (funcName) {
+	      if (_this3.events[funcName]) {
+	        _this3.events[funcName].forEach(function (event) {
+	          (0, _NodeList2.default)(trigger).on(event, _this3[funcName]);
+	        });
+	      }
 	    });
 	  },
 	  beforeDestroy: function beforeDestroy() {
@@ -6933,7 +7018,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-0619dfdb", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-a0e20b0e", module.exports)
 	  }
 	}
 
@@ -6960,7 +7045,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Progressbar.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Progressbar.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -6971,9 +7056,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-1abcb87c", __vue_options__)
+	    hotAPI.createRecord("data-v-78c7541a", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-1abcb87c", __vue_options__)
+	    hotAPI.reload("data-v-78c7541a", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Progressbar.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -7038,7 +7123,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-1abcb87c", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-78c7541a", module.exports)
 	  }
 	}
 
@@ -7068,7 +7153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Radio.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Radio.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -7079,9 +7164,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-f5ceac9e", __vue_options__)
+	    hotAPI.createRecord("data-v-77afd3cf", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-f5ceac9e", __vue_options__)
+	    hotAPI.reload("data-v-77afd3cf", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Radio.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -7105,8 +7190,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-f5ceac9e!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Radio.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-f5ceac9e!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Radio.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-77afd3cf!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Radio.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-77afd3cf!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Radio.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -7277,7 +7362,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    on: {
 	      "click": function($event) {
 	        $event.preventDefault();
-	        _vm.toggle($event)
+	        return _vm.toggle($event)
 	      }
 	    }
 	  }, [(_vm.buttonStyle) ? [_c('input', {
@@ -7305,7 +7390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "checked": _vm._q(_vm.check, _vm.selectedValue)
 	    },
 	    on: {
-	      "__c": function($event) {
+	      "change": function($event) {
 	        _vm.check = _vm.selectedValue
 	      }
 	    }
@@ -7331,7 +7416,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "checked": _vm._q(_vm.check, _vm.selectedValue)
 	    },
 	    on: {
-	      "__c": function($event) {
+	      "change": function($event) {
 	        _vm.check = _vm.selectedValue
 	      }
 	    }
@@ -7347,7 +7432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-f5ceac9e", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-77afd3cf", module.exports)
 	  }
 	}
 
@@ -7377,10 +7462,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Select.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Select.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-	__vue_options__._scopeId = "data-v-83f07694"
+	__vue_options__._scopeId = "data-v-1e55de58"
 	
 	/* hot reload */
 	if (false) {(function () {
@@ -7389,9 +7474,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-83f07694", __vue_options__)
+	    hotAPI.createRecord("data-v-1e55de58", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-83f07694", __vue_options__)
+	    hotAPI.reload("data-v-1e55de58", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Select.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -7415,8 +7500,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-83f07694&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Select.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-83f07694&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Select.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-1e55de58&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Select.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-1e55de58&scoped=true!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Select.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -7434,7 +7519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "\n.form-control.dropdown-toggle[data-v-83f07694]{\n  height: auto;\n  padding-right: 24px;\n}\n.form-control.dropdown-toggle[data-v-83f07694]:after{\n  content: ' ';\n  position: absolute;\n  right: 13px;\n  top: 50%;\n  margin: -1px 0 0;\n  border-top: 4px dashed;\n  border-top: 4px solid \\9;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n}\n.bs-searchbox[data-v-83f07694] {\n  position: relative;\n  margin: 4px 8px;\n}\n.bs-searchbox .close[data-v-83f07694] {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.bs-searchbox input[data-v-83f07694]:focus,\n.form-control.dropdown-toggle[data-v-83f07694]:focus {\n  outline: 0;\n  border-color: #66afe9 !important;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\n.secret[data-v-83f07694] {\n  border: 0;\n  clip: rect(0 0 0 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n}\n.form-control.dropdown-toggle>.close[data-v-83f07694] { margin-left: 5px;\n}\n.notify.out[data-v-83f07694] { position: relative;\n}\n.notify.in[data-v-83f07694],\n.notify>div[data-v-83f07694] {\n  position: absolute;\n  width: 96%;\n  margin: 0 2%;\n  min-height: 26px;\n  padding: 3px 5px;\n  background: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);\n  pointer-events: none;\n}\n.notify>div[data-v-83f07694] {\n  top: 5px;\n  z-index: 1;\n}\n.notify.in[data-v-83f07694] {\n  opacity: .9;\n  bottom: 5px;\n}\n.btn-group-justified .dropdown-toggle>span[data-v-83f07694]:not(.close) {\n  width: calc(100% - 18px);\n  display: inline-block;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  margin-bottom: -4px;\n}\n.btn-group-justified .dropdown-menu[data-v-83f07694] { width: 100%;\n}\n", "", {"version":3,"sources":["/./src/Select.vue?7ca49d1d"],"names":[],"mappings":";AAuQA;EACA,aAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;EACA,YAAA;EACA,SAAA;EACA,iBAAA;EACA,uBAAA;EACA,yBAAA;EACA,oCAAA;EACA,mCAAA;CACA;AACA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;EACA,WAAA;EACA,eAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;CACA;AACA;;EAEA,WAAA;EACA,iCAAA;EACA,0EAAA;CACA;AACA;EACA,UAAA;EACA,oBAAA;EACA,YAAA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,mBAAA;EACA,WAAA;CACA;AACA,wDAAA,iBAAA;CAAA;AACA,+BAAA,mBAAA;CAAA;AACA;;EAEA,mBAAA;EACA,WAAA;EACA,aAAA;EACA,iBAAA;EACA,iBAAA;EACA,oBAAA;EACA,0BAAA;EACA,4CAAA;EACA,qBAAA;CACA;AACA;EACA,SAAA;EACA,WAAA;CACA;AACA;EACA,YAAA;EACA,YAAA;CACA;AACA;EACA,yBAAA;EACA,sBAAA;EACA,iBAAA;EACA,oBAAA;EACA,wBAAA;EACA,oBAAA;CACA;AACA,uDAAA,YAAA;CAAA","file":"Select.vue","sourcesContent":["<template>\n  <div ref=\"select\" :class=\"classes\" v-click-outside=\"close\">\n    <div ref=\"btn\" class=\"form-control dropdown-toggle\" tabindex=\"1\" :disabled=\"disabled || !hasParent\" :readonly=\"readonly\"\n      @blur=\"canSearch ? null : close()\"\n      @click=\"toggle()\"\n      @keydown.esc.stop.prevent=\"close\"\n      @keydown.space.stop.prevent=\"toggle\"\n      @keydown.enter.stop.prevent=\"toggle\"\n    >\n      <span class=\"btn-content\" v-html=\"loading ? text.loading : showPlaceholder || (multiple && showCount ? selectedText : selected)\"></span>\n      <span v-if=\"clearButton&&values.length\" class=\"close\" @click=\"clear()\">&times;</span>\n    </div>\n    <select ref=\"sel\" v-model=\"val\" :name=\"name\" class=\"secret\" :multiple=\"multiple\" :required=\"required\" :readonly=\"readonly\" :disabled=\"disabled\">\n      <option v-if=\"required\" value=\"\"></option>\n      <option v-for=\"option in list\" :value=\"option[optionsValue]\">{{ option[optionsLabel] }}</option>\n    </select>\n    <ul class=\"dropdown-menu\">\n      <template v-if=\"list.length\">\n        <li v-if=\"canSearch\" class=\"bs-searchbox\">\n          <input type=\"text\" :placeholder=\"searchText||text.search\" class=\"form-control\" autocomplete=\"off\" ref=\"search\"\n            v-model=\"searchValue\"\n            @keyup.esc=\"close\"\n          />\n          <span v-show=\"searchValue\" class=\"close\" @click=\"clearSearch\">&times;</span>\n        </li>\n        <li v-if=\"required&&!clearButton\"><a @mousedown.prevent=\"clear() && close()\">{{ placeholder || text.notSelected }}</a></li>\n        <li v-for=\"option in filteredOptions\" :id=\"option[optionsValue]\">\n          <a @mousedown.prevent=\"select(option[optionsValue])\">\n            <span v-html=\"option[optionsLabel]\"></span>\n            <span class=\"glyphicon glyphicon-ok check-mark\" v-show=\"isSelected(option[optionsValue])\"></span>\n          </a>\n        </li>\n      </template>\n      <slot></slot>\n      <transition v-if=\"notify && !closeOnSelect\" name=\"fadein\"><div class=\"notify in\">{{limitText}}</div></transition>\n    </ul>\n    <transition v-if=\"notify && closeOnSelect\" name=\"fadein\"><div class=\"notify out\"><div>{{limitText}}</div></div></transition>\n    <!-- <pre>Options: {{list}}</pre> -->\n  </div>\n</template>\n\n<script>\nimport {translations} from './utils/utils.js'\nimport ClickOutside from './directives/ClickOutside.js'\n\nvar timeout = {}\nexport default {\n  directives: {\n    ClickOutside\n  },\n  props: {\n    clearButton: {type: Boolean, default: false},\n    closeOnSelect: {type: Boolean, default: false},\n    disabled: {type: Boolean, default: false},\n    lang: {type: String, default: navigator.language},\n    limit: {type: Number, default: 1024},\n    minSearch: {type: Number, default: 0},\n    multiple: {type: Boolean, default: false},\n    name: {type: String, default: null},\n    options: {type: Array, default () { return [] }},\n    optionsLabel: {type: String, default: 'label'},\n    optionsValue: {type: String, default: 'value'},\n    parent: {default: true},\n    placeholder: {type: String, default: null},\n    readonly: {type: Boolean, default: null},\n    required: {type: Boolean, default: null},\n    search: {type: Boolean, default: false},\n    searchText: {type: String, default: null},\n    countText: {type: String, default: null},\n    showCount: {type: Boolean, default: false},\n    url: {type: String, default: null},\n    value: null\n  },\n  data () {\n    return {\n      list: [],\n      loading: null,\n      searchValue: null,\n      show: false,\n      notify: false,\n      val: null,\n      valid: null\n    }\n  },\n  computed: {\n    canSearch () { return this.minSearch ? this.list.length >= this.minSearch : this.search },\n    classes () { return [{open: this.show, disabled: this.disabled}, this.class, this.isLi ? 'dropdown' : this.inInput ? 'input-group-btn' : 'btn-group'] },\n    filteredOptions () {\n      var search = (this.searchValue || '').toLowerCase()\n      return !search ? this.list : this.list.filter(el => {\n        return ~el[this.optionsLabel].toLowerCase().search(search)\n      })\n    },\n    hasParent () { return this.parent instanceof Array ? this.parent.length : this.parent },\n    inInput () { return this.$parent._input },\n    isLi () { return this.$parent._navbar || this.$parent.menu || this.$parent._tabset },\n    limitText () { return this.text.limit.replace('{{limit}}', this.limit) },\n    selected () {\n      if (this.list.length === 0) { return '' }\n      var sel = this.values.map(val => (this.list.find(o => o[this.optionsValue] === val) || {})[this.optionsLabel]).filter(val => val !== undefined)\n      this.$emit('selected', sel)\n      return sel.join(', ')\n    },\n    selectedText () { return this.countText || this.text.selected.replace('{{count}}', this.values.length) },\n    showPlaceholder () { return (this.values.length === 0 || !this.hasParent) ? (this.placeholder || this.text.notSelected) : null },\n    text () { return translations(this.lang) },\n    values () { return this.val instanceof Array ? this.val : ~[null, undefined].indexOf(this.val) ? [] : [this.val] },\n    valOptions () { return this.list.map(el => el[this.optionsValue]) }\n  },\n  watch: {\n    options (options) {\n      if (options instanceof Array) this.setOptions(options)\n    },\n    show (val) {\n      if (val) {\n        this.$refs.search ? this.$refs.search.focus() : this.$refs.btn.focus()\n        // onBlur(this.$refs.select, e => { this.show = false })\n      } else {\n        // offBlur(this.$refs.select)\n      }\n    },\n    url () {\n      this.urlChanged()\n    },\n    valid (val, old) {\n      this.$emit('isvalid', val)\n      this.$emit(!val ? 'invalid' : 'valid')\n      if (val !== old && this._parent) this._parent.validate()\n    },\n    value (val, old) {\n      if (val !== old) { this.val = val }\n    },\n    val (val, old) {\n      if (val === undefined) { this.val = val = null }\n      if (val !== old) {\n        this.$emit('change', val)\n        this.$emit('input', val)\n      }\n      if (val instanceof Array && val.length > this.limit) {\n        this.val = val.slice(0, this.limit)\n        this.notify = true\n        if (timeout.limit) clearTimeout(timeout.limit)\n        timeout.limit = setTimeout(() => {\n          timeout.limit = false\n          this.notify = false\n        }, 1500)\n      }\n      this.valid = this.validate()\n    }\n  },\n  methods: {\n    close () {\n      this.show = false\n    },\n    checkData () {\n      if (this.multiple) {\n        if (this.limit < 1) { this.limit = 1 }\n        if (!(this.val instanceof Array)) {\n          this.val = (this.val === null || this.val === undefined) ? [] : [this.val]\n        }\n        var values = this.valOptions\n        this.val = this.val.filter(el => ~values.indexOf(el))\n        if (this.values.length > this.limit) {\n          this.val = this.val.slice(0, this.limit)\n        }\n      } else {\n        if (!~this.valOptions.indexOf(this.val)) { this.val = null }\n      }\n    },\n    clear () {\n      if (this.disabled || this.readonly) { return }\n      this.val = this.val instanceof Array ? [] : null\n      this.toggle()\n    },\n    clearSearch () {\n      this.searchValue = ''\n      this.$refs.search.focus()\n    },\n    isSelected (v) {\n      return this.values.indexOf(v) > -1\n    },\n    select (v) {\n      if (this.val instanceof Array) {\n        var newVal = this.val.slice(0)\n        if (~newVal.indexOf(v)) {\n          newVal.splice(newVal.indexOf(v), 1)\n        } else {\n          newVal.push(v)\n        }\n        this.val = newVal\n        if (this.closeOnSelect) {\n          this.toggle()\n        }\n      } else {\n        this.val = v\n        this.toggle()\n      }\n    },\n    setOptions (options) {\n      this.list = options.map(el => {\n        if (el instanceof Object) { return el }\n        let obj = {}\n        obj[this.optionsLabel] = el\n        obj[this.optionsValue] = el\n        return obj\n      })\n      this.$emit('options', this.list)\n    },\n    toggle () {\n      if (this.disabled && !this.show) return;\n      this.show = !this.show\n      if (!this.show) this.$refs.btn.focus()\n    },\n    urlChanged () {\n      if (!this.url || !this.$http) { return }\n      this.loading = true\n      this.$http.get(this.url).then(response => {\n        var data = response.data instanceof Array ? response.data : []\n        try { data = JSON.parse(data) } catch (e) {}\n        this.setOptions(data)\n        this.loading = false\n        this.checkData()\n      }, response => {\n        this.loading = false\n      })\n    },\n    validate () {\n      return !this.required ? true : this.val instanceof Array ? this.val.length > 0 : this.val !== null\n    }\n  },\n  created () {\n    this.setOptions(this.options)\n    this.val = this.value\n    this._select = true\n    if (this.val === undefined || !this.parent) { this.val = null }\n    if (!this.multiple && this.val instanceof Array) {\n      this.val = this.val[0]\n    }\n    this.checkData()\n    if (this.url) this.urlChanged()\n    let parent = this.$parent\n    while (parent && !parent._formValidator) { parent = parent.$parent }\n    if (parent && parent._formValidator) {\n      parent.children.push(this)\n      this._parent = parent\n    }\n  },\n  mounted () {\n    if (this._parent) this._parent.children.push(this)\n    this.setOptions(this.options)\n    this.val = this.value\n    this.checkData()\n  },\n  beforeDestroy () {\n    if (this._parent) {\n      var index = this._parent.children.indexOf(this)\n      this._parent.children.splice(index, 1)\n    }\n  }\n}\n</script>\n\n<style scoped>\n.form-control.dropdown-toggle{\n  height: auto;\n  padding-right: 24px;\n}\n.form-control.dropdown-toggle:after{\n  content: ' ';\n  position: absolute;\n  right: 13px;\n  top: 50%;\n  margin: -1px 0 0;\n  border-top: 4px dashed;\n  border-top: 4px solid \\9;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n}\n.bs-searchbox {\n  position: relative;\n  margin: 4px 8px;\n}\n.bs-searchbox .close {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.bs-searchbox input:focus,\n.form-control.dropdown-toggle:focus {\n  outline: 0;\n  border-color: #66afe9 !important;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\n.secret {\n  border: 0;\n  clip: rect(0 0 0 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n}\n.form-control.dropdown-toggle>.close { margin-left: 5px;}\n.notify.out { position: relative; }\n.notify.in,\n.notify>div {\n  position: absolute;\n  width: 96%;\n  margin: 0 2%;\n  min-height: 26px;\n  padding: 3px 5px;\n  background: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);\n  pointer-events: none;\n}\n.notify>div {\n  top: 5px;\n  z-index: 1;\n}\n.notify.in {\n  opacity: .9;\n  bottom: 5px;\n}\n.btn-group-justified .dropdown-toggle>span:not(.close) {\n  width: calc(100% - 18px);\n  display: inline-block;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  margin-bottom: -4px;\n}\n.btn-group-justified .dropdown-menu { width: 100%; }\n</style>\n\n"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.form-control.dropdown-toggle[data-v-1e55de58]{\n  height: auto;\n  padding-right: 24px;\n}\n.form-control.dropdown-toggle[data-v-1e55de58]:after{\n  content: ' ';\n  position: absolute;\n  right: 13px;\n  top: 50%;\n  margin: -1px 0 0;\n  border-top: 4px dashed;\n  border-top: 4px solid \\9;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n}\n.bs-searchbox[data-v-1e55de58] {\n  position: relative;\n  margin: 4px 8px;\n}\n.bs-searchbox .close[data-v-1e55de58] {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.bs-searchbox input[data-v-1e55de58]:focus,\n.form-control.dropdown-toggle[data-v-1e55de58]:focus {\n  outline: 0;\n  border-color: #66afe9 !important;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\n.secret[data-v-1e55de58] {\n  border: 0;\n  clip: rect(0 0 0 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n}\n.form-control.dropdown-toggle>.close[data-v-1e55de58] { margin-left: 5px;\n}\n.notify.out[data-v-1e55de58] { position: relative;\n}\n.notify.in[data-v-1e55de58],\n.notify>div[data-v-1e55de58] {\n  position: absolute;\n  width: 96%;\n  margin: 0 2%;\n  min-height: 26px;\n  padding: 3px 5px;\n  background: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);\n  pointer-events: none;\n}\n.notify>div[data-v-1e55de58] {\n  top: 5px;\n  z-index: 1;\n}\n.notify.in[data-v-1e55de58] {\n  opacity: .9;\n  bottom: 5px;\n}\n.btn-group-justified .dropdown-toggle>span[data-v-1e55de58]:not(.close) {\n  width: calc(100% - 18px);\n  display: inline-block;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  margin-bottom: -4px;\n}\n.btn-group-justified .dropdown-menu[data-v-1e55de58] { width: 100%;\n}\n", "", {"version":3,"sources":["/./src/Select.vue?7ca49d1d"],"names":[],"mappings":";AAuQA;EACA,aAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;EACA,YAAA;EACA,SAAA;EACA,iBAAA;EACA,uBAAA;EACA,yBAAA;EACA,oCAAA;EACA,mCAAA;CACA;AACA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;EACA,WAAA;EACA,eAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;CACA;AACA;;EAEA,WAAA;EACA,iCAAA;EACA,0EAAA;CACA;AACA;EACA,UAAA;EACA,oBAAA;EACA,YAAA;EACA,aAAA;EACA,iBAAA;EACA,WAAA;EACA,mBAAA;EACA,WAAA;CACA;AACA,wDAAA,iBAAA;CAAA;AACA,+BAAA,mBAAA;CAAA;AACA;;EAEA,mBAAA;EACA,WAAA;EACA,aAAA;EACA,iBAAA;EACA,iBAAA;EACA,oBAAA;EACA,0BAAA;EACA,4CAAA;EACA,qBAAA;CACA;AACA;EACA,SAAA;EACA,WAAA;CACA;AACA;EACA,YAAA;EACA,YAAA;CACA;AACA;EACA,yBAAA;EACA,sBAAA;EACA,iBAAA;EACA,oBAAA;EACA,wBAAA;EACA,oBAAA;CACA;AACA,uDAAA,YAAA;CAAA","file":"Select.vue","sourcesContent":["<template>\n  <div ref=\"select\" :class=\"classes\" v-click-outside=\"close\">\n    <div ref=\"btn\" class=\"form-control dropdown-toggle\" tabindex=\"1\" :disabled=\"disabled || !hasParent\" :readonly=\"readonly\"\n      @blur=\"canSearch ? null : close()\"\n      @click=\"toggle()\"\n      @keydown.esc.stop.prevent=\"close\"\n      @keydown.space.stop.prevent=\"toggle\"\n      @keydown.enter.stop.prevent=\"toggle\"\n    >\n      <span class=\"btn-content\" v-html=\"loading ? text.loading : showPlaceholder || (multiple && showCount ? selectedText : selected)\"></span>\n      <span v-if=\"clearButton&&values.length\" class=\"close\" @click=\"clear()\">&times;</span>\n    </div>\n    <select ref=\"sel\" v-model=\"val\" :name=\"name\" class=\"secret\" :multiple=\"multiple\" :required=\"required\" :readonly=\"readonly\" :disabled=\"disabled\">\n      <option v-if=\"required\" value=\"\"></option>\n      <option v-for=\"option in list\" :value=\"option[optionsValue]\">{{ option[optionsLabel] }}</option>\n    </select>\n    <ul class=\"dropdown-menu\">\n      <template v-if=\"list.length\">\n        <li v-if=\"canSearch\" class=\"bs-searchbox\">\n          <input type=\"text\" :placeholder=\"searchText||text.search\" class=\"form-control\" autocomplete=\"off\" ref=\"search\"\n            v-model=\"searchValue\"\n            @keyup.esc=\"close\"\n          />\n          <span v-show=\"searchValue\" class=\"close\" @click=\"clearSearch\">&times;</span>\n        </li>\n        <li v-if=\"required&&!clearButton\"><a @mousedown.prevent=\"clear() && close()\">{{ placeholder || text.notSelected }}</a></li>\n        <li v-for=\"option in filteredOptions\" :id=\"option[optionsValue]\">\n          <a @mousedown.prevent=\"select(option[optionsValue])\">\n            <span v-html=\"option[optionsLabel]\"></span>\n            <span class=\"glyphicon glyphicon-ok check-mark\" v-show=\"isSelected(option[optionsValue])\"></span>\n          </a>\n        </li>\n      </template>\n      <slot></slot>\n      <transition v-if=\"notify && !closeOnSelect\" name=\"fadein\"><div class=\"notify in\">{{limitText}}</div></transition>\n    </ul>\n    <transition v-if=\"notify && closeOnSelect\" name=\"fadein\"><div class=\"notify out\"><div>{{limitText}}</div></div></transition>\n    <!-- <pre>Options: {{list}}</pre> -->\n  </div>\n</template>\n\n<script>\nimport {translations} from './utils/utils.js'\nimport ClickOutside from './directives/ClickOutside.js'\n\nvar timeout = {}\nexport default {\n  directives: {\n    ClickOutside\n  },\n  props: {\n    clearButton: {type: Boolean, default: false},\n    closeOnSelect: {type: Boolean, default: false},\n    disabled: {type: Boolean, default: false},\n    lang: {type: String, default: navigator.language},\n    limit: {type: Number, default: 1024},\n    minSearch: {type: Number, default: 0},\n    multiple: {type: Boolean, default: false},\n    name: {type: String, default: null},\n    options: {type: Array, default () { return [] }},\n    optionsLabel: {type: String, default: 'label'},\n    optionsValue: {type: String, default: 'value'},\n    parent: {default: true},\n    placeholder: {type: String, default: null},\n    readonly: {type: Boolean, default: null},\n    required: {type: Boolean, default: null},\n    search: {type: Boolean, default: false},\n    searchText: {type: String, default: null},\n    countText: {type: String, default: null},\n    showCount: {type: Boolean, default: false},\n    url: {type: String, default: null},\n    value: null\n  },\n  data () {\n    return {\n      list: [],\n      loading: null,\n      searchValue: null,\n      show: false,\n      notify: false,\n      val: null,\n      valid: null\n    }\n  },\n  computed: {\n    canSearch () { return this.minSearch ? this.list.length >= this.minSearch : this.search },\n    classes () { return [{open: this.show, disabled: this.disabled}, this.class, this.isLi ? 'dropdown' : this.inInput ? 'input-group-btn' : 'btn-group'] },\n    filteredOptions () {\n      var search = (this.searchValue || '').toLowerCase()\n      return !search ? this.list : this.list.filter(el => {\n        return ~el[this.optionsLabel].toLowerCase().search(search)\n      })\n    },\n    hasParent () { return this.parent instanceof Array ? this.parent.length : this.parent },\n    inInput () { return this.$parent._input },\n    isLi () { return this.$parent._navbar || this.$parent.menu || this.$parent._tabset },\n    limitText () { return this.text.limit.replace('{{limit}}', this.limit) },\n    selected () {\n      if (this.list.length === 0) { return '' }\n      var sel = this.values.map(val => (this.list.find(o => o[this.optionsValue] === val) || {})[this.optionsLabel]).filter(val => val !== undefined)\n      this.$emit('selected', sel)\n      return sel.join(', ')\n    },\n    selectedText () { return this.countText || this.text.selected.replace('{{count}}', this.values.length) },\n    showPlaceholder () { return (this.values.length === 0 || !this.hasParent) ? (this.placeholder || this.text.notSelected) : null },\n    text () { return translations(this.lang) },\n    values () { return this.val instanceof Array ? this.val : ~[null, undefined].indexOf(this.val) ? [] : [this.val] },\n    valOptions () { return this.list.map(el => el[this.optionsValue]) }\n  },\n  watch: {\n    options (options) {\n      if (options instanceof Array) this.setOptions(options)\n    },\n    show (val) {\n      if (val) {\n        this.$refs.search ? this.$refs.search.focus() : this.$refs.btn.focus()\n        // onBlur(this.$refs.select, e => { this.show = false })\n      } else {\n        // offBlur(this.$refs.select)\n      }\n    },\n    url () {\n      this.urlChanged()\n    },\n    valid (val, old) {\n      this.$emit('isvalid', val)\n      this.$emit(!val ? 'invalid' : 'valid')\n      if (val !== old && this._parent) this._parent.validate()\n    },\n    value (val, old) {\n      if (val !== old) { this.val = val }\n    },\n    val (val, old) {\n      if (val === undefined) { this.val = val = null }\n      if (val !== old) {\n        this.$emit('change', val)\n        this.$emit('input', val)\n      }\n      if (val instanceof Array && val.length > this.limit) {\n        this.val = val.slice(0, this.limit)\n        this.notify = true\n        if (timeout.limit) clearTimeout(timeout.limit)\n        timeout.limit = setTimeout(() => {\n          timeout.limit = false\n          this.notify = false\n        }, 1500)\n      }\n      this.valid = this.validate()\n    }\n  },\n  methods: {\n    close () {\n      this.show = false\n    },\n    checkData () {\n      if (this.multiple) {\n        if (this.limit < 1) { this.limit = 1 }\n        if (!(this.val instanceof Array)) {\n          this.val = (this.val === null || this.val === undefined) ? [] : [this.val]\n        }\n        var values = this.valOptions\n        this.val = this.val.filter(el => ~values.indexOf(el))\n        if (this.values.length > this.limit) {\n          this.val = this.val.slice(0, this.limit)\n        }\n      } else {\n        if (!~this.valOptions.indexOf(this.val)) { this.val = null }\n      }\n    },\n    clear () {\n      if (this.disabled || this.readonly) { return }\n      this.val = this.val instanceof Array ? [] : null\n      this.toggle()\n    },\n    clearSearch () {\n      this.searchValue = ''\n      this.$refs.search.focus()\n    },\n    isSelected (v) {\n      return this.values.indexOf(v) > -1\n    },\n    select (v) {\n      if (this.val instanceof Array) {\n        var newVal = this.val.slice(0)\n        if (~newVal.indexOf(v)) {\n          newVal.splice(newVal.indexOf(v), 1)\n        } else {\n          newVal.push(v)\n        }\n        this.val = newVal\n        if (this.closeOnSelect) {\n          this.toggle()\n        }\n      } else {\n        this.val = v\n        this.toggle()\n      }\n    },\n    setOptions (options) {\n      this.list = options.map(el => {\n        if (el instanceof Object) { return el }\n        let obj = {}\n        obj[this.optionsLabel] = el\n        obj[this.optionsValue] = el\n        return obj\n      })\n      this.$emit('options', this.list)\n    },\n    toggle () {\n      if (this.disabled && !this.show) return;\n      this.show = !this.show\n      if (!this.show) this.$refs.btn.focus()\n    },\n    urlChanged () {\n      if (!this.url || !this.$http) { return }\n      this.loading = true\n      this.$http.get(this.url).then(response => {\n        var data = response.data instanceof Array ? response.data : []\n        try { data = JSON.parse(data) } catch (e) {}\n        this.setOptions(data)\n        this.loading = false\n        this.checkData()\n      }, response => {\n        this.loading = false\n      })\n    },\n    validate () {\n      return !this.required ? true : this.val instanceof Array ? this.val.length > 0 : this.val !== null\n    }\n  },\n  created () {\n    this.setOptions(this.options)\n    this.val = this.value\n    this._select = true\n    if (this.val === undefined || !this.parent) { this.val = null }\n    if (!this.multiple && this.val instanceof Array) {\n      this.val = this.val[0]\n    }\n    this.checkData()\n    if (this.url) this.urlChanged()\n    let parent = this.$parent\n    while (parent && !parent._formValidator) { parent = parent.$parent }\n    if (parent && parent._formValidator) {\n      parent.children.push(this)\n      this._parent = parent\n    }\n  },\n  mounted () {\n    if (this._parent) this._parent.children.push(this)\n    this.setOptions(this.options)\n    this.val = this.value\n    this.checkData()\n  },\n  beforeDestroy () {\n    if (this._parent) {\n      var index = this._parent.children.indexOf(this)\n      this._parent.children.splice(index, 1)\n    }\n  }\n}\n</script>\n\n<style scoped>\n.form-control.dropdown-toggle{\n  height: auto;\n  padding-right: 24px;\n}\n.form-control.dropdown-toggle:after{\n  content: ' ';\n  position: absolute;\n  right: 13px;\n  top: 50%;\n  margin: -1px 0 0;\n  border-top: 4px dashed;\n  border-top: 4px solid \\9;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n}\n.bs-searchbox {\n  position: relative;\n  margin: 4px 8px;\n}\n.bs-searchbox .close {\n  position: absolute;\n  top: 0;\n  right: 0;\n  z-index: 2;\n  display: block;\n  width: 34px;\n  height: 34px;\n  line-height: 34px;\n  text-align: center;\n}\n.bs-searchbox input:focus,\n.form-control.dropdown-toggle:focus {\n  outline: 0;\n  border-color: #66afe9 !important;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);\n}\n.secret {\n  border: 0;\n  clip: rect(0 0 0 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n}\n.form-control.dropdown-toggle>.close { margin-left: 5px;}\n.notify.out { position: relative; }\n.notify.in,\n.notify>div {\n  position: absolute;\n  width: 96%;\n  margin: 0 2%;\n  min-height: 26px;\n  padding: 3px 5px;\n  background: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);\n  pointer-events: none;\n}\n.notify>div {\n  top: 5px;\n  z-index: 1;\n}\n.notify.in {\n  opacity: .9;\n  bottom: 5px;\n}\n.btn-group-justified .dropdown-toggle>span:not(.close) {\n  width: calc(100% - 18px);\n  display: inline-block;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  margin-bottom: -4px;\n}\n.btn-group-justified .dropdown-menu { width: 100%; }\n</style>\n\n"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -7812,23 +7897,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _vm.canSearch ? null : _vm.close()
 	      },
 	      "click": function($event) {
-	        _vm.toggle()
+	        return _vm.toggle()
 	      },
 	      "keydown": [function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "esc", 27)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) { return null; }
 	        $event.stopPropagation();
 	        $event.preventDefault();
-	        _vm.close($event)
+	        return _vm.close($event)
 	      }, function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "space", 32)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "space", 32, $event.key, [" ", "Spacebar"])) { return null; }
 	        $event.stopPropagation();
 	        $event.preventDefault();
-	        _vm.toggle($event)
+	        return _vm.toggle($event)
 	      }, function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) { return null; }
 	        $event.stopPropagation();
 	        $event.preventDefault();
-	        _vm.toggle($event)
+	        return _vm.toggle($event)
 	      }]
 	    }
 	  }, [_c('span', {
@@ -7840,7 +7925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    staticClass: "close",
 	    on: {
 	      "click": function($event) {
-	        _vm.clear()
+	        return _vm.clear()
 	      }
 	    }
 	  }, [_vm._v("×")]) : _vm._e()]), _vm._v(" "), _c('select', {
@@ -7903,8 +7988,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    on: {
 	      "keyup": function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "esc", 27)) { return null; }
-	        _vm.close($event)
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) { return null; }
+	        return _vm.close($event)
 	      },
 	      "input": function($event) {
 	        if ($event.target.composing) { return; }
@@ -7938,7 +8023,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      on: {
 	        "mousedown": function($event) {
 	          $event.preventDefault();
-	          _vm.select(option[_vm.optionsValue])
+	          return _vm.select(option[_vm.optionsValue])
 	        }
 	      }
 	    }, [_c('span', {
@@ -7971,7 +8056,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-83f07694", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-1e55de58", module.exports)
 	  }
 	}
 
@@ -7998,7 +8083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Slider.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Slider.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -8009,9 +8094,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-62aa8e1b", __vue_options__)
+	    hotAPI.createRecord("data-v-7a0eb086", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-62aa8e1b", __vue_options__)
+	    hotAPI.reload("data-v-7a0eb086", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Slider.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -8063,7 +8148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-62aa8e1b", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-7a0eb086", module.exports)
 	  }
 	}
 
@@ -8093,7 +8178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Spinner.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Spinner.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -8104,9 +8189,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-c7c14d62", __vue_options__)
+	    hotAPI.createRecord("data-v-459473ed", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-c7c14d62", __vue_options__)
+	    hotAPI.reload("data-v-459473ed", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Spinner.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -8130,8 +8215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-c7c14d62!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Spinner.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-c7c14d62!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Spinner.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-459473ed!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Spinner.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-459473ed!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Spinner.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -8295,7 +8380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-c7c14d62", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-459473ed", module.exports)
 	  }
 	}
 
@@ -8322,7 +8407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Tab.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Tab.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -8333,9 +8418,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-58ac87cb", __vue_options__)
+	    hotAPI.createRecord("data-v-6ca3a169", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-58ac87cb", __vue_options__)
+	    hotAPI.reload("data-v-6ca3a169", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Tab.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -8453,7 +8538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-58ac87cb", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-6ca3a169", module.exports)
 	  }
 	}
 
@@ -8483,7 +8568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/TabGroup.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/TabGroup.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -8494,9 +8579,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-aa6a37b8", __vue_options__)
+	    hotAPI.createRecord("data-v-2ff91d46", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-aa6a37b8", __vue_options__)
+	    hotAPI.reload("data-v-2ff91d46", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] TabGroup.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -8520,8 +8605,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-aa6a37b8!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TabGroup.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-aa6a37b8!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TabGroup.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2ff91d46!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TabGroup.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2ff91d46!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TabGroup.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -8602,7 +8687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-aa6a37b8", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-2ff91d46", module.exports)
 	  }
 	}
 
@@ -8632,7 +8717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Tabs.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Tabs.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -8643,9 +8728,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-7edfda90", __vue_options__)
+	    hotAPI.createRecord("data-v-2b7c2cda", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-7edfda90", __vue_options__)
+	    hotAPI.reload("data-v-2b7c2cda", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Tabs.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -8669,8 +8754,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-7edfda90!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tabs.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-7edfda90!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tabs.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2b7c2cda!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tabs.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2b7c2cda!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tabs.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -8801,7 +8886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      on: {
 	        "click": function($event) {
 	          $event.preventDefault();
-	          _vm.select(header)
+	          return _vm.select(header)
 	        }
 	      }
 	    }, [_vm._t("header", [_c('a', {
@@ -8831,11 +8916,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        on: {
 	          "click": function($event) {
 	            $event.preventDefault();
-	            _vm.select(tab)
+	            return _vm.select(tab)
 	          }
 	        }
 	      }, [_vm._v(_vm._s(tab.header))])])
-	    })) : _vm._e()]
+	    }), 0) : _vm._e()]
 	  })], 2), _vm._v(" "), _c('div', {
 	    staticClass: "tab-content"
 	  }, [_vm._t("default")], 2)])
@@ -8843,7 +8928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-7edfda90", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-2b7c2cda", module.exports)
 	  }
 	}
 
@@ -8870,7 +8955,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/ToggleButton.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/ToggleButton.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -8881,9 +8966,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-1823c8e0", __vue_options__)
+	    hotAPI.createRecord("data-v-7b6ca102", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-1823c8e0", __vue_options__)
+	    hotAPI.reload("data-v-7b6ca102", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] ToggleButton.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -8998,7 +9083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-1823c8e0", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-7b6ca102", module.exports)
 	  }
 	}
 
@@ -9028,7 +9113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Tooltip.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Tooltip.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -9039,9 +9124,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-2aaf7239", __vue_options__)
+	    hotAPI.createRecord("data-v-57b6e652", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-2aaf7239", __vue_options__)
+	    hotAPI.reload("data-v-57b6e652", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Tooltip.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -9065,8 +9150,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2aaf7239!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tooltip.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2aaf7239!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tooltip.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-57b6e652!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tooltip.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-57b6e652!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Tooltip.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -9153,7 +9238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-2aaf7239", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-57b6e652", module.exports)
 	  }
 	}
 
@@ -9171,7 +9256,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	__vue_exports__ = __webpack_require__(190)
 	
 	/* template */
-	var __vue_template__ = __webpack_require__(206)
+	var __vue_template__ = __webpack_require__(205)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -9183,7 +9268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "/home/koala/projects/tusur/vue-strap/src/Typeahead.vue"
+	__vue_options__.__file = "/Users/david/Projects/NarrativeDx/vue-strap/src/Typeahead.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 	
@@ -9194,9 +9279,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-177e6b7d", __vue_options__)
+	    hotAPI.createRecord("data-v-3817569b", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-177e6b7d", __vue_options__)
+	    hotAPI.reload("data-v-3817569b", __vue_options__)
 	  }
 	})()}
 	if (__vue_options__.functional) {console.error("[vue-loader] Typeahead.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -9220,8 +9305,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-177e6b7d!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Typeahead.vue", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-177e6b7d!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Typeahead.vue");
+			module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-3817569b!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Typeahead.vue", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-3817569b!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Typeahead.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -9418,7 +9503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.__esModule = true;
 	
-	var _iterator = __webpack_require__(20);
+	var _iterator = __webpack_require__(21);
 	
 	var _iterator2 = _interopRequireDefault(_iterator);
 	
@@ -9447,10 +9532,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(194);
+	__webpack_require__(202);
 	__webpack_require__(203);
 	__webpack_require__(204);
-	__webpack_require__(205);
 	module.exports = __webpack_require__(7).Symbol;
+
 
 /***/ }),
 /* 194 */
@@ -9458,189 +9544,191 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	// ECMAScript 6 symbols shim
-	var global         = __webpack_require__(6)
-	  , has            = __webpack_require__(29)
-	  , DESCRIPTORS    = __webpack_require__(15)
-	  , $export        = __webpack_require__(5)
-	  , redefine       = __webpack_require__(28)
-	  , META           = __webpack_require__(195).KEY
-	  , $fails         = __webpack_require__(16)
-	  , shared         = __webpack_require__(43)
-	  , setToStringTag = __webpack_require__(47)
-	  , uid            = __webpack_require__(44)
-	  , wks            = __webpack_require__(48)
-	  , wksExt         = __webpack_require__(55)
-	  , wksDefine      = __webpack_require__(196)
-	  , keyOf          = __webpack_require__(197)
-	  , enumKeys       = __webpack_require__(198)
-	  , isArray        = __webpack_require__(201)
-	  , anObject       = __webpack_require__(12)
-	  , toIObject      = __webpack_require__(36)
-	  , toPrimitive    = __webpack_require__(18)
-	  , createDesc     = __webpack_require__(19)
-	  , _create        = __webpack_require__(32)
-	  , gOPNExt        = __webpack_require__(60)
-	  , $GOPD          = __webpack_require__(202)
-	  , $DP            = __webpack_require__(11)
-	  , $keys          = __webpack_require__(34)
-	  , gOPD           = $GOPD.f
-	  , dP             = $DP.f
-	  , gOPN           = gOPNExt.f
-	  , $Symbol        = global.Symbol
-	  , $JSON          = global.JSON
-	  , _stringify     = $JSON && $JSON.stringify
-	  , PROTOTYPE      = 'prototype'
-	  , HIDDEN         = wks('_hidden')
-	  , TO_PRIMITIVE   = wks('toPrimitive')
-	  , isEnum         = {}.propertyIsEnumerable
-	  , SymbolRegistry = shared('symbol-registry')
-	  , AllSymbols     = shared('symbols')
-	  , OPSymbols      = shared('op-symbols')
-	  , ObjectProto    = Object[PROTOTYPE]
-	  , USE_NATIVE     = typeof $Symbol == 'function'
-	  , QObject        = global.QObject;
+	var global = __webpack_require__(6);
+	var has = __webpack_require__(20);
+	var DESCRIPTORS = __webpack_require__(15);
+	var $export = __webpack_require__(5);
+	var redefine = __webpack_require__(29);
+	var META = __webpack_require__(195).KEY;
+	var $fails = __webpack_require__(16);
+	var shared = __webpack_require__(43);
+	var setToStringTag = __webpack_require__(47);
+	var uid = __webpack_require__(44);
+	var wks = __webpack_require__(48);
+	var wksExt = __webpack_require__(55);
+	var wksDefine = __webpack_require__(196);
+	var enumKeys = __webpack_require__(197);
+	var isArray = __webpack_require__(200);
+	var anObject = __webpack_require__(12);
+	var isObject = __webpack_require__(13);
+	var toObject = __webpack_require__(50);
+	var toIObject = __webpack_require__(36);
+	var toPrimitive = __webpack_require__(18);
+	var createDesc = __webpack_require__(19);
+	var _create = __webpack_require__(32);
+	var gOPNExt = __webpack_require__(60);
+	var $GOPD = __webpack_require__(201);
+	var $GOPS = __webpack_require__(198);
+	var $DP = __webpack_require__(11);
+	var $keys = __webpack_require__(34);
+	var gOPD = $GOPD.f;
+	var dP = $DP.f;
+	var gOPN = gOPNExt.f;
+	var $Symbol = global.Symbol;
+	var $JSON = global.JSON;
+	var _stringify = $JSON && $JSON.stringify;
+	var PROTOTYPE = 'prototype';
+	var HIDDEN = wks('_hidden');
+	var TO_PRIMITIVE = wks('toPrimitive');
+	var isEnum = {}.propertyIsEnumerable;
+	var SymbolRegistry = shared('symbol-registry');
+	var AllSymbols = shared('symbols');
+	var OPSymbols = shared('op-symbols');
+	var ObjectProto = Object[PROTOTYPE];
+	var USE_NATIVE = typeof $Symbol == 'function' && !!$GOPS.f;
+	var QObject = global.QObject;
 	// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
 	var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
 	
 	// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-	var setSymbolDesc = DESCRIPTORS && $fails(function(){
+	var setSymbolDesc = DESCRIPTORS && $fails(function () {
 	  return _create(dP({}, 'a', {
-	    get: function(){ return dP(this, 'a', {value: 7}).a; }
+	    get: function () { return dP(this, 'a', { value: 7 }).a; }
 	  })).a != 7;
-	}) ? function(it, key, D){
+	}) ? function (it, key, D) {
 	  var protoDesc = gOPD(ObjectProto, key);
-	  if(protoDesc)delete ObjectProto[key];
+	  if (protoDesc) delete ObjectProto[key];
 	  dP(it, key, D);
-	  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+	  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
 	} : dP;
 	
-	var wrap = function(tag){
+	var wrap = function (tag) {
 	  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
 	  sym._k = tag;
 	  return sym;
 	};
 	
-	var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+	var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it) {
 	  return typeof it == 'symbol';
-	} : function(it){
+	} : function (it) {
 	  return it instanceof $Symbol;
 	};
 	
-	var $defineProperty = function defineProperty(it, key, D){
-	  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+	var $defineProperty = function defineProperty(it, key, D) {
+	  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
 	  anObject(it);
 	  key = toPrimitive(key, true);
 	  anObject(D);
-	  if(has(AllSymbols, key)){
-	    if(!D.enumerable){
-	      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+	  if (has(AllSymbols, key)) {
+	    if (!D.enumerable) {
+	      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
 	      it[HIDDEN][key] = true;
 	    } else {
-	      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
-	      D = _create(D, {enumerable: createDesc(0, false)});
+	      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+	      D = _create(D, { enumerable: createDesc(0, false) });
 	    } return setSymbolDesc(it, key, D);
 	  } return dP(it, key, D);
 	};
-	var $defineProperties = function defineProperties(it, P){
+	var $defineProperties = function defineProperties(it, P) {
 	  anObject(it);
-	  var keys = enumKeys(P = toIObject(P))
-	    , i    = 0
-	    , l = keys.length
-	    , key;
-	  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+	  var keys = enumKeys(P = toIObject(P));
+	  var i = 0;
+	  var l = keys.length;
+	  var key;
+	  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
 	  return it;
 	};
-	var $create = function create(it, P){
+	var $create = function create(it, P) {
 	  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
 	};
-	var $propertyIsEnumerable = function propertyIsEnumerable(key){
+	var $propertyIsEnumerable = function propertyIsEnumerable(key) {
 	  var E = isEnum.call(this, key = toPrimitive(key, true));
-	  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+	  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
 	  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
 	};
-	var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
-	  it  = toIObject(it);
+	var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
+	  it = toIObject(it);
 	  key = toPrimitive(key, true);
-	  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+	  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
 	  var D = gOPD(it, key);
-	  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+	  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
 	  return D;
 	};
-	var $getOwnPropertyNames = function getOwnPropertyNames(it){
-	  var names  = gOPN(toIObject(it))
-	    , result = []
-	    , i      = 0
-	    , key;
-	  while(names.length > i){
-	    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+	var $getOwnPropertyNames = function getOwnPropertyNames(it) {
+	  var names = gOPN(toIObject(it));
+	  var result = [];
+	  var i = 0;
+	  var key;
+	  while (names.length > i) {
+	    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
 	  } return result;
 	};
-	var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
-	  var IS_OP  = it === ObjectProto
-	    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
-	    , result = []
-	    , i      = 0
-	    , key;
-	  while(names.length > i){
-	    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
+	var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
+	  var IS_OP = it === ObjectProto;
+	  var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
+	  var result = [];
+	  var i = 0;
+	  var key;
+	  while (names.length > i) {
+	    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
 	  } return result;
 	};
 	
 	// 19.4.1.1 Symbol([description])
-	if(!USE_NATIVE){
-	  $Symbol = function Symbol(){
-	    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+	if (!USE_NATIVE) {
+	  $Symbol = function Symbol() {
+	    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
 	    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-	    var $set = function(value){
-	      if(this === ObjectProto)$set.call(OPSymbols, value);
-	      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+	    var $set = function (value) {
+	      if (this === ObjectProto) $set.call(OPSymbols, value);
+	      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
 	      setSymbolDesc(this, tag, createDesc(1, value));
 	    };
-	    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+	    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
 	    return wrap(tag);
 	  };
-	  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+	  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
 	    return this._k;
 	  });
 	
 	  $GOPD.f = $getOwnPropertyDescriptor;
-	  $DP.f   = $defineProperty;
+	  $DP.f = $defineProperty;
 	  __webpack_require__(61).f = gOPNExt.f = $getOwnPropertyNames;
-	  __webpack_require__(200).f  = $propertyIsEnumerable;
-	  __webpack_require__(199).f = $getOwnPropertySymbols;
+	  __webpack_require__(199).f = $propertyIsEnumerable;
+	  $GOPS.f = $getOwnPropertySymbols;
 	
-	  if(DESCRIPTORS && !__webpack_require__(27)){
+	  if (DESCRIPTORS && !__webpack_require__(28)) {
 	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
 	  }
 	
-	  wksExt.f = function(name){
+	  wksExt.f = function (name) {
 	    return wrap(wks(name));
-	  }
+	  };
 	}
 	
-	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+	$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
 	
-	for(var symbols = (
+	for (var es6Symbols = (
 	  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
 	  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-	).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+	).split(','), j = 0; es6Symbols.length > j;)wks(es6Symbols[j++]);
 	
-	for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+	for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
 	
 	$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
 	  // 19.4.2.1 Symbol.for(key)
-	  'for': function(key){
+	  'for': function (key) {
 	    return has(SymbolRegistry, key += '')
 	      ? SymbolRegistry[key]
 	      : SymbolRegistry[key] = $Symbol(key);
 	  },
 	  // 19.4.2.5 Symbol.keyFor(sym)
-	  keyFor: function keyFor(key){
-	    if(isSymbol(key))return keyOf(SymbolRegistry, key);
-	    throw TypeError(key + ' is not a symbol!');
+	  keyFor: function keyFor(sym) {
+	    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
+	    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
 	  },
-	  useSetter: function(){ setter = true; },
-	  useSimple: function(){ setter = false; }
+	  useSetter: function () { setter = true; },
+	  useSimple: function () { setter = false; }
 	});
 	
 	$export($export.S + $export.F * !USE_NATIVE, 'Object', {
@@ -9658,25 +9746,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getOwnPropertySymbols: $getOwnPropertySymbols
 	});
 	
+	// Chrome 38 and 39 `Object.getOwnPropertySymbols` fails on primitives
+	// https://bugs.chromium.org/p/v8/issues/detail?id=3443
+	var FAILS_ON_PRIMITIVES = $fails(function () { $GOPS.f(1); });
+	
+	$export($export.S + $export.F * FAILS_ON_PRIMITIVES, 'Object', {
+	  getOwnPropertySymbols: function getOwnPropertySymbols(it) {
+	    return $GOPS.f(toObject(it));
+	  }
+	});
+	
 	// 24.3.2 JSON.stringify(value [, replacer [, space]])
-	$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+	$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
 	  var S = $Symbol();
 	  // MS Edge converts symbol values to JSON as {}
 	  // WebKit converts symbol values to JSON as null
 	  // V8 throws on boxed symbols
-	  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+	  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
 	})), 'JSON', {
-	  stringify: function stringify(it){
-	    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
-	    var args = [it]
-	      , i    = 1
-	      , replacer, $replacer;
-	    while(arguments.length > i)args.push(arguments[i++]);
-	    replacer = args[1];
-	    if(typeof replacer == 'function')$replacer = replacer;
-	    if($replacer || !isArray(replacer))replacer = function(key, value){
-	      if($replacer)value = $replacer.call(this, key, value);
-	      if(!isSymbol(value))return value;
+	  stringify: function stringify(it) {
+	    var args = [it];
+	    var i = 1;
+	    var replacer, $replacer;
+	    while (arguments.length > i) args.push(arguments[i++]);
+	    $replacer = replacer = args[1];
+	    if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
+	    if (!isArray(replacer)) replacer = function (key, value) {
+	      if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
+	      if (!isSymbol(value)) return value;
 	    };
 	    args[1] = replacer;
 	    return _stringify.apply($JSON, args);
@@ -9692,176 +9789,171 @@ return /******/ (function(modules) { // webpackBootstrap
 	// 24.3.3 JSON[@@toStringTag]
 	setToStringTag(global.JSON, 'JSON', true);
 
+
 /***/ }),
 /* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var META     = __webpack_require__(44)('meta')
-	  , isObject = __webpack_require__(13)
-	  , has      = __webpack_require__(29)
-	  , setDesc  = __webpack_require__(11).f
-	  , id       = 0;
-	var isExtensible = Object.isExtensible || function(){
+	var META = __webpack_require__(44)('meta');
+	var isObject = __webpack_require__(13);
+	var has = __webpack_require__(20);
+	var setDesc = __webpack_require__(11).f;
+	var id = 0;
+	var isExtensible = Object.isExtensible || function () {
 	  return true;
 	};
-	var FREEZE = !__webpack_require__(16)(function(){
+	var FREEZE = !__webpack_require__(16)(function () {
 	  return isExtensible(Object.preventExtensions({}));
 	});
-	var setMeta = function(it){
-	  setDesc(it, META, {value: {
+	var setMeta = function (it) {
+	  setDesc(it, META, { value: {
 	    i: 'O' + ++id, // object ID
 	    w: {}          // weak collections IDs
-	  }});
+	  } });
 	};
-	var fastKey = function(it, create){
+	var fastKey = function (it, create) {
 	  // return primitive with prefix
-	  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-	  if(!has(it, META)){
+	  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+	  if (!has(it, META)) {
 	    // can't set metadata to uncaught frozen object
-	    if(!isExtensible(it))return 'F';
+	    if (!isExtensible(it)) return 'F';
 	    // not necessary to add metadata
-	    if(!create)return 'E';
+	    if (!create) return 'E';
 	    // add missing metadata
 	    setMeta(it);
 	  // return object ID
 	  } return it[META].i;
 	};
-	var getWeak = function(it, create){
-	  if(!has(it, META)){
+	var getWeak = function (it, create) {
+	  if (!has(it, META)) {
 	    // can't set metadata to uncaught frozen object
-	    if(!isExtensible(it))return true;
+	    if (!isExtensible(it)) return true;
 	    // not necessary to add metadata
-	    if(!create)return false;
+	    if (!create) return false;
 	    // add missing metadata
 	    setMeta(it);
 	  // return hash weak collections IDs
 	  } return it[META].w;
 	};
 	// add metadata on freeze-family methods calling
-	var onFreeze = function(it){
-	  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+	var onFreeze = function (it) {
+	  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
 	  return it;
 	};
 	var meta = module.exports = {
-	  KEY:      META,
-	  NEED:     false,
-	  fastKey:  fastKey,
-	  getWeak:  getWeak,
+	  KEY: META,
+	  NEED: false,
+	  fastKey: fastKey,
+	  getWeak: getWeak,
 	  onFreeze: onFreeze
 	};
+
 
 /***/ }),
 /* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var global         = __webpack_require__(6)
-	  , core           = __webpack_require__(7)
-	  , LIBRARY        = __webpack_require__(27)
-	  , wksExt         = __webpack_require__(55)
-	  , defineProperty = __webpack_require__(11).f;
-	module.exports = function(name){
+	var global = __webpack_require__(6);
+	var core = __webpack_require__(7);
+	var LIBRARY = __webpack_require__(28);
+	var wksExt = __webpack_require__(55);
+	var defineProperty = __webpack_require__(11).f;
+	module.exports = function (name) {
 	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-	  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+	  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
 	};
+
 
 /***/ }),
 /* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getKeys   = __webpack_require__(34)
-	  , toIObject = __webpack_require__(36);
-	module.exports = function(object, el){
-	  var O      = toIObject(object)
-	    , keys   = getKeys(O)
-	    , length = keys.length
-	    , index  = 0
-	    , key;
-	  while(length > index)if(O[key = keys[index++]] === el)return key;
+	// all enumerable object keys, includes symbols
+	var getKeys = __webpack_require__(34);
+	var gOPS = __webpack_require__(198);
+	var pIE = __webpack_require__(199);
+	module.exports = function (it) {
+	  var result = getKeys(it);
+	  var getSymbols = gOPS.f;
+	  if (getSymbols) {
+	    var symbols = getSymbols(it);
+	    var isEnum = pIE.f;
+	    var i = 0;
+	    var key;
+	    while (symbols.length > i) if (isEnum.call(it, key = symbols[i++])) result.push(key);
+	  } return result;
 	};
+
 
 /***/ }),
 /* 198 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-	// all enumerable object keys, includes symbols
-	var getKeys = __webpack_require__(34)
-	  , gOPS    = __webpack_require__(199)
-	  , pIE     = __webpack_require__(200);
-	module.exports = function(it){
-	  var result     = getKeys(it)
-	    , getSymbols = gOPS.f;
-	  if(getSymbols){
-	    var symbols = getSymbols(it)
-	      , isEnum  = pIE.f
-	      , i       = 0
-	      , key;
-	    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
-	  } return result;
-	};
+	exports.f = Object.getOwnPropertySymbols;
+
 
 /***/ }),
 /* 199 */
 /***/ (function(module, exports) {
 
-	exports.f = Object.getOwnPropertySymbols;
+	exports.f = {}.propertyIsEnumerable;
+
 
 /***/ }),
 /* 200 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	exports.f = {}.propertyIsEnumerable;
+	// 7.2.2 IsArray(argument)
+	var cof = __webpack_require__(38);
+	module.exports = Array.isArray || function isArray(arg) {
+	  return cof(arg) == 'Array';
+	};
+
 
 /***/ }),
 /* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	// 7.2.2 IsArray(argument)
-	var cof = __webpack_require__(38);
-	module.exports = Array.isArray || function isArray(arg){
-	  return cof(arg) == 'Array';
+	var pIE = __webpack_require__(199);
+	var createDesc = __webpack_require__(19);
+	var toIObject = __webpack_require__(36);
+	var toPrimitive = __webpack_require__(18);
+	var has = __webpack_require__(20);
+	var IE8_DOM_DEFINE = __webpack_require__(14);
+	var gOPD = Object.getOwnPropertyDescriptor;
+	
+	exports.f = __webpack_require__(15) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+	  O = toIObject(O);
+	  P = toPrimitive(P, true);
+	  if (IE8_DOM_DEFINE) try {
+	    return gOPD(O, P);
+	  } catch (e) { /* empty */ }
+	  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
 	};
+
 
 /***/ }),
 /* 202 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-	var pIE            = __webpack_require__(200)
-	  , createDesc     = __webpack_require__(19)
-	  , toIObject      = __webpack_require__(36)
-	  , toPrimitive    = __webpack_require__(18)
-	  , has            = __webpack_require__(29)
-	  , IE8_DOM_DEFINE = __webpack_require__(14)
-	  , gOPD           = Object.getOwnPropertyDescriptor;
-	
-	exports.f = __webpack_require__(15) ? gOPD : function getOwnPropertyDescriptor(O, P){
-	  O = toIObject(O);
-	  P = toPrimitive(P, true);
-	  if(IE8_DOM_DEFINE)try {
-	    return gOPD(O, P);
-	  } catch(e){ /* empty */ }
-	  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
-	};
+
 
 /***/ }),
 /* 203 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+	__webpack_require__(196)('asyncIterator');
 
 
 /***/ }),
 /* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(196)('asyncIterator');
+	__webpack_require__(196)('observable');
+
 
 /***/ }),
 /* 205 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	__webpack_require__(196)('observable');
-
-/***/ }),
-/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -9893,19 +9985,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _vm.showDropdown = false
 	      },
 	      "keydown": [function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "down", 40)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) { return null; }
 	        $event.preventDefault();
-	        _vm.down($event)
+	        return _vm.down($event)
 	      }, function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
-	        _vm.hit($event)
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) { return null; }
+	        return _vm.hit($event)
 	      }, function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "esc", 27)) { return null; }
-	        _vm.reset($event)
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) { return null; }
+	        return _vm.reset($event)
 	      }, function($event) {
-	        if (!('button' in $event) && _vm._k($event.keyCode, "up", 38)) { return null; }
+	        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "up", 38, $event.key, ["Up", "ArrowUp"])) { return null; }
 	        $event.preventDefault();
-	        _vm.up($event)
+	        return _vm.up($event)
 	      }],
 	      "input": function($event) {
 	        if ($event.target.composing) { return; }
@@ -9924,10 +10016,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      on: {
 	        "mousedown": function($event) {
 	          $event.preventDefault();
-	          _vm.hit($event)
+	          return _vm.hit($event)
 	        },
 	        "mousemove": function($event) {
-	          _vm.setActive(i)
+	          return _vm.setActive(i)
 	        }
 	      }
 	    }, [_c(_vm.templateComp, {
@@ -9936,12 +10028,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "item": item
 	      }
 	    })], 1)])
-	  }))])
+	  }), 0)])
 	},staticRenderFns: []}
 	if (false) {
 	  module.hot.accept()
 	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-177e6b7d", module.exports)
+	     require("vue-hot-reload-api").rerender("data-v-3817569b", module.exports)
 	  }
 	}
 
