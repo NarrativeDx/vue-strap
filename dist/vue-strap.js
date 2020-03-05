@@ -6923,6 +6923,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.$nextTick(function () {
 	        var popover = _this2.$refs.popover;
 	        var trigger = _this2.$refs.trigger.children[0];
+	
+	        if (!(popover && trigger)) {
+	          return;
+	        }
+	
 	        switch (_this2.placement) {
 	          case 'top':
 	            _this2.left = trigger.offsetLeft - popover.offsetWidth / 2 + trigger.offsetWidth / 2;
