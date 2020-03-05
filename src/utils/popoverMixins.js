@@ -17,7 +17,7 @@ export default {
     }
   },
   computed: {
-    events () { return { contextmenu: ['contextmenu'], hover: ['mouseleave', 'mouseenter'], focus: ['blur', 'focus'] }[this.trigger] || ['click'] }
+    events () { return { contextmenu: {toggle: ['contextmenu']}, hover: {hide: ['mouseleave'], show_: ['mouseenter']}, focus: {hide: ['blur'], show_: ['focus']} }[this.trigger] || {toggle: ['click']} }
   },
   methods: {
     beforeEnter () {
@@ -48,14 +48,24 @@ export default {
           default:
             console.warn('Wrong placement prop')
         }
-        popover.style.top = this.top + 'px'
+        popover.style.top = this.top + 'px';
         popover.style.left = this.left + 'px'
       })
     },
+    setVisibility(vis, e) {
+      if (e && this.trigger === 'contextmenu') e.preventDefault();
+      const prevVis = this.show;
+      this.show = vis;
+      if( !prevVis && this.show ) this.beforeEnter();
+    },
     toggle (e) {
-      if (e && this.trigger === 'contextmenu') e.preventDefault()
-      this.show = !this.show
-      if (this.show) this.beforeEnter()
+      this.setVisibility(!this.show, e);
+    },
+    show_ (e) {
+      this.setVisibility(true, e);
+    },
+    hide(e) {
+      this.setVisibility(false, e);
     }
   },
   mounted () {
@@ -66,9 +76,14 @@ export default {
       trigger = $('a,input,select,textarea,button', trigger)
       if (!trigger.length) { return }
     }
-    this.events.forEach(event => {
-      $(trigger).on(event, this.toggle)
-    })
+
+    ['show_', 'hide', 'toggle'].forEach(funcName => {
+        if( this.events[funcName] ) {
+          this.events[funcName].forEach(event => {
+            $(trigger).on(event, this[funcName]);
+          });
+        }
+    });
   },
   beforeDestroy () {
     if (this._trigger) $(this._trigger).off()
