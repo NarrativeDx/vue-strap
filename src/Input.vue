@@ -3,7 +3,26 @@
     <slot name="label"><label v-if="label" class="control-label" @click="focus">{{label}}</label></slot>
     <div v-if="$slots.before||$slots.after" class="input-group">
       <slot name="before"></slot>
-      <textarea :is="type=='textarea'?type:'input'" class="form-control" ref="input"
+      <input v-if="type!='textarea'" class="form-control" ref="input"
+             :cols="cols"
+             :disabled="disabled"
+             :list="id_datalist"
+             :max="attr(max)"
+             :maxlength="maxlength"
+             :min="attr(min)"
+             :name="name"
+             :placeholder="placeholder"
+             :readonly="readonly"
+             :required="required"
+             :rows="rows"
+             :step="step"
+             :title="attr(title)"
+             :type="type"
+             v-model="val"
+             @blur="emit" @focus="emit" @input="emit"
+             @keyup.enter="enterSubmit&&submit()"
+      />
+      <textarea v-if="type=='textarea'" class="form-control" ref="input"
         :cols="cols"
         :disabled="disabled"
         :list="id_datalist"
@@ -17,10 +36,8 @@
         :rows="rows"
         :step="step"
         :title="attr(title)"
-        :type="type=='textarea'?null:type"
         v-model="val"
         @blur="emit" @focus="emit" @input="emit"
-        @keyup.enter="type!='textarea'&&enterSubmit&&submit()"
       ></textarea>
       <div v-if="clearButton && value" :class="{icon:icon}">
         <span class="close" @click="value = ''">&times;</span>
@@ -31,7 +48,26 @@
       <slot name="after"></slot>
     </div>
     <template v-else>
-      <textarea :is="type=='textarea'?type:'input'" class="form-control" ref="input"
+      <input v-if="type!='textarea'" class="form-control" ref="input"
+             :cols="cols"
+             :disabled="disabled"
+             :list="id_datalist"
+             :max="attr(max)"
+             :maxlength="maxlength"
+             :min="attr(min)"
+             :name="name"
+             :placeholder="placeholder"
+             :readonly="readonly"
+             :required="required"
+             :rows="rows"
+             :step="step"
+             :title="attr(title)"
+             :type="type"
+             v-model="val"
+             @blur="emit" @focus="emit" @input="emit"
+             @keyup.enter="enterSubmit&&submit()"
+      />
+      <textarea v-if="type=='textarea'" class="form-control" ref="input"
         :cols="cols"
         :disabled="disabled"
         :list="id_datalist"
@@ -45,10 +81,8 @@
         :rows="rows"
         :step="step"
         :title="attr(title)"
-        :type="type=='textarea'?null:type"
         v-model="val"
         @blur="emit" @focus="emit" @input="emit"
-        @keyup.enter="type!='textarea'&&enterSubmit&&submit()"
       ></textarea>
       <span v-if="clearButton && val" class="close" @click="val = ''">&times;</span>
       <span v-if="icon&&valid!==null" :class="['form-control-feedback glyphicon','glyphicon-'+(valid?'ok':'remove')]" aria-hidden="true"></span>
